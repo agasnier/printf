@@ -6,97 +6,158 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 12:15:42 by algasnie          #+#    #+#             */
-/*   Updated: 2025/10/24 17:34:58 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/10/29 19:08:44 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <unistd.h>
-#include <stdarg.h>
+#include "ft_printf.h"
 #include "libft/libft.h"
 
-int	ft_integer(int i)
+
+void	ft_init_struct(t_data *data)
 {
-	char	*convert;
-	size_t	len;
+
+	data->hash = 0;
+	data->minus = 0;
+	data->zero = 0;
+	data->plus = 0;
+	data->space = 0;
+	data->width = 0;
+	data->is_prec = 0;
+	data->prec = 0;
+}
+
+void	ft_pars_flags(char *str, size_t *i, t_data *data)
+{
+	while (str[*i] == '#' || str[*i] == '-' || str[*i] == '0' || str[*i] == '+' || str[*i] == ' ')
+	{
+		if (str[*i] == '#')
+			data->hash = 1;
+		else if (str[*i] == '-')
+			data->minus = 1;
+		else if (str[*i] == '0')
+			data->zero = 1;
+		else if (str[*i] == '+')
+			data->plus = 1;
+		else if (str[*i] == ' ')
+			data->space = 1;
+		(*i)++;
+	}
+}
+
+
+//gerer la valeur dynamique ???
+void	ft_pars_width(char *str, size_t *i, t_data *data)
+{
+	int	width;
+
+	width = 0;
+	while (str[*i] >= '0' && str[*i] <= '9')
+	{
+		width *= 10;
+		width += str[*i] - '0';
+		(*i)++;
+	}
+	data->width = width;
+}
+
+
+//gerer la valeur dynamique ???
+void	ft_pars_preci(char *str, size_t *i, t_data *data)
+{
+	int	prec;
 	
-	convert = ft_itoa(i);
-	ft_putstr_fd(convert, 1);
-	len = ft_strlen(convert);
-	free(convert);
+	if (str[*i] != '.');
+		return ;
+
+	data->is_prec = 1;
+	(*i)++;
+
+	prec = 0;
+	while (str[*i] >= '0' && str[*i] <= '9')
+	{
+		prec *= 10;
+		prec += str[*i] - '0';
+		(*i)++;
+	}
+	data->prec = prec;
+	
+}
+
+void	ft_pars_speci(char *str, size_t *i, t_data *data)
+{
+
+	if (str[*i] == 'c')
+
+	else if (str[*i] == 's')
+
+	else if (str[*i] == 'p')
+
+	else if (str[*i] == 'd')
+
+	else if (str[*i] == 'i')
+
+	else if (str[*i] == 'u')
+
+	else if (str[*i] == 'x')
+
+	else if (str[*i] == 'X')
+
+	else if (str[*i] == '%')
+	
+	else 
+
+//si le spec n'est pas bon il faut tout afficher
+
+
+
+
+
+}
+
+size_t	ft_pars_data(char *str, size_t *i, va_list args)
+{
+	size_t	len;
+	t_data	data;
+
+	ft_init_struct(&data);
+	ft_pars_flags(&str, &i, &data);
+	ft_pars_width(&str, &i, &data);
+	ft_pars_preci(&str, &i, &data);
+	ft_pars_speci(&str, &i, &data);
+
+
 	return (len);
 }
 
-int	ft_char(char c)
-{
-	write(1, &c, 1);
-	return (1);
-}
 
-int	ft_str(char *s)
-{
-	ft_putstr_fd(s, 1);
-	return (ft_strlen(s));
-}
 
-int	ft_pourcent(void)
+int	ft_printf(const char *str, ...)
 {
-	write(1, "%", 1);
-	return (1);
-}
-
-/*int	ft_printf(const char *s, ...)
-{
-	va_list	args; //creation variable
-	va_start(args, s); //fait pointer args apres s
-	va_arg(args, int); //valeur prochaine variable int
-	va_end(args) //ferme la list
-}*/
-
-int	ft_printf(const char *s, ...)
-{
-	va_list	args; //creation variable
-	va_start(args, s); //fait pointer args apres s
+	va_list	args; //creation list variables
+	va_start(args, str); //fait pointer args apres s
 
 	size_t	i;
 	size_t	len_print;
-
-		//%c Prints a single character.
-		//%s Prints a string (as defined by the common C convention).
-	//%p The void * pointer argument has to be printed in hexadecimal format.
-	//%d Prints a decimal (base 10) number.
-	//%i Prints an integer in base 10.
-	//%u Prints an unsigned decimal (base 10) number.
-	//%x Prints a number in hexadecimal (base 16) lowercase format.
-	//%X Prints a number in hexadecimal (base 16) uppercase format.
-		//%% Prints a percent sign.
 	
+	//if (!s)
+
 	i = 0;
 	len_print = 0;
-	while (s[i])
+	while (str[i])
 	{
-		if (s[i] == '%')
+		if (str[i] == '%')
 		{
-			if (s[i + 1] == 'c')
-				len_print += ft_char(va_arg(args, int));
-			if (s[i + 1] == 's')
-				len_print += ft_str(va_arg(args, char *));
-			if (s[i + 1] == 'd')
-				len_print += ft_integer(va_arg(args, int));
-			if (s[i + 1] == '%')
-				len_print += ft_pourcent();
-			i += 2;
+			i++;
+			len_print += ft_pars_data(str, &i, args);
 		}
 		else
 		{
-			write(1, &s[i], 1);
-			i++;
-			len_print += 1;
+			len_print += ft_char(str[i]);
 		}
+		i++;
 	}
-	
-	//va_arg(args, int); //valeur prochaine variable int
-	//va_end(args) //ferme la list
+	va_end(args); //ferme la list
 	return (len_print);
 }
 
