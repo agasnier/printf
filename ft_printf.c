@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 12:15:42 by algasnie          #+#    #+#             */
-/*   Updated: 2025/10/29 19:08:44 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/10/29 21:14:37 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	ft_pars_preci(char *str, size_t *i, t_data *data)
 {
 	int	prec;
 	
-	if (str[*i] != '.');
+	if (str[*i] != '.')
 		return ;
 
 	data->is_prec = 1;
@@ -84,12 +84,21 @@ void	ft_pars_preci(char *str, size_t *i, t_data *data)
 	
 }
 
-void	ft_pars_speci(char *str, size_t *i, t_data *data)
+int	ft_putchar_mod(char c, t_data *data)
 {
+	if (data->minus == 0)
+		write(1, &c, 1);
+	return (1);
+}
 
+int	ft_pars_speci(char *str, size_t *i, t_data *data, va_list args)
+{
+	int len;
+
+	len = 0;
 	if (str[*i] == 'c')
-
-	else if (str[*i] == 's')
+		len += ft_putchar_mod(va_arg(args, int), data);
+	/*else if (str[*i] == 's')
 
 	else if (str[*i] == 'p')
 
@@ -103,16 +112,13 @@ void	ft_pars_speci(char *str, size_t *i, t_data *data)
 
 	else if (str[*i] == 'X')
 
-	else if (str[*i] == '%')
+	else if (str[*i] == '%')*/
 	
 	else 
+		write(1, &str[*i], 1);
 
+	return (len);
 //si le spec n'est pas bon il faut tout afficher
-
-
-
-
-
 }
 
 size_t	ft_pars_data(char *str, size_t *i, va_list args)
@@ -120,17 +126,22 @@ size_t	ft_pars_data(char *str, size_t *i, va_list args)
 	size_t	len;
 	t_data	data;
 
+	len = 0;
 	ft_init_struct(&data);
-	ft_pars_flags(&str, &i, &data);
-	ft_pars_width(&str, &i, &data);
-	ft_pars_preci(&str, &i, &data);
-	ft_pars_speci(&str, &i, &data);
+	ft_pars_flags(str, i, &data);
+	ft_pars_width(str, i, &data);
+	ft_pars_preci(str, i, &data);
+	len += ft_pars_speci(str, i, &data, args);
 
 
 	return (len);
 }
 
-
+size_t	ft_char(char c)
+{
+	write(1, &c, 1);
+	return (1);
+}
 
 int	ft_printf(const char *str, ...)
 {
@@ -149,11 +160,11 @@ int	ft_printf(const char *str, ...)
 		if (str[i] == '%')
 		{
 			i++;
-			len_print += ft_pars_data(str, &i, args);
+			len_print += ft_pars_data((char *)str, &i, args); //const casté
 		}
 		else
 		{
-			len_print += ft_char(str[i]);
+			len_print += write(1, &str[i], 1);
 		}
 		i++;
 	}
