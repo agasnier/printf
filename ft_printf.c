@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 12:15:42 by algasnie          #+#    #+#             */
-/*   Updated: 2025/10/31 11:37:17 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/10/31 14:14:11 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,44 @@ int	ft_numb(int num)
 	return (len);
 }
 
+static int	ft_num_len(unsigned int num)
+{
+	int len;
+
+	len = 0;
+	if (num == 0)
+		return (1);
+	while (num > 0)
+	{
+		num /= 10;
+		len++;
+	}
+	return (len);
+}
+
+int	ft_unsigned(unsigned int num)
+{
+	int len;
+	char *c_num;
+
+	len = ft_num_len(num);
+	c_num = malloc(sizeof(char) * (len + 1));
+	if (!c_num)
+		return (-1);
+	c_num[len] = '\0';
+	if (num == 0)
+		c_num[0] = '0';
+	while (num > 0)
+	{
+		c_num[--len] = (num % 10) + '0';
+		num /= 10;
+	}
+	len = ft_strlen(c_num);
+	ft_putstr_fd(c_num, 1);
+	free(c_num);
+	return (len);
+}
+
 int	ft_pars_speci(char *str, int *i, t_data *data, va_list args)
 {
 	int len;
@@ -127,9 +165,10 @@ int	ft_pars_speci(char *str, int *i, t_data *data, va_list args)
 	else if (str[*i] == 'd' || str[*i] == 'i')
 		len += ft_numb(va_arg(args, int));
 
-	/*else if (str[*i] == 'u')
+	else if (str[*i] == 'u')
+		len += ft_unsigned(va_arg(args, unsigned int));
 
-	else if (str[*i] == 'x')
+	/*else if (str[*i] == 'x')
 
 	else if (str[*i] == 'X')
 */
@@ -224,6 +263,12 @@ int	main(void)
 	diff1 = ft_printf("%i", 256);
 	printf("\t");
 	diff2 = printf("%i", 256);
+	printf("\tdiff: %d\n", diff1 - diff2);
+
+	printf("\n");
+	diff1 = ft_printf("%u", 256);
+	printf("\t");
+	diff2 = printf("%u", 256);
 	printf("\tdiff: %d\n", diff1 - diff2);
 
 	printf("\n");
