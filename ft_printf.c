@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 12:15:42 by algasnie          #+#    #+#             */
-/*   Updated: 2025/10/31 14:14:11 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/10/31 15:05:24 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int	ft_numb(int num)
 	return (len);
 }
 
-static int	ft_num_len(unsigned int num)
+static int	ft_num_len(unsigned int num, int base_size)
 {
 	int len;
 
@@ -122,7 +122,7 @@ static int	ft_num_len(unsigned int num)
 		return (1);
 	while (num > 0)
 	{
-		num /= 10;
+		num /= base_size;
 		len++;
 	}
 	return (len);
@@ -133,7 +133,7 @@ int	ft_unsigned(unsigned int num)
 	int len;
 	char *c_num;
 
-	len = ft_num_len(num);
+	len = ft_num_len(num, 10);
 	c_num = malloc(sizeof(char) * (len + 1));
 	if (!c_num)
 		return (-1);
@@ -144,6 +144,34 @@ int	ft_unsigned(unsigned int num)
 	{
 		c_num[--len] = (num % 10) + '0';
 		num /= 10;
+	}
+	len = ft_strlen(c_num);
+	ft_putstr_fd(c_num, 1);
+	free(c_num);
+	return (len);
+}
+
+int	ft_hex(unsigned int num, char spec)
+{
+	char *base;
+	char *c_num;
+	int len;
+
+	if (spec == 'X')
+		base = "0123456789ABCDEF";
+	else
+		base = "0123456789abcdef";
+	len = ft_num_len(num, 16);
+	c_num = malloc(sizeof(char) * (len + 1));
+	if (!c_num)
+		return (-1);
+	c_num[len] = '\0';
+	if (num == 0)
+		c_num[0] = base[0];
+	while (num > 0)
+	{
+		c_num[--len] = base[num % 16];
+		num /= 16;
 	}
 	len = ft_strlen(c_num);
 	ft_putstr_fd(c_num, 1);
@@ -168,10 +196,9 @@ int	ft_pars_speci(char *str, int *i, t_data *data, va_list args)
 	else if (str[*i] == 'u')
 		len += ft_unsigned(va_arg(args, unsigned int));
 
-	/*else if (str[*i] == 'x')
-
-	else if (str[*i] == 'X')
-*/
+	else if (str[*i] == 'x' || str[*i] == 'X')
+		len += ft_hex(va_arg(args, unsigned int), str[*i]);
+	
 	else if (str[*i] == '%')
 		len += ft_char('%');
 	
@@ -272,10 +299,23 @@ int	main(void)
 	printf("\tdiff: %d\n", diff1 - diff2);
 
 	printf("\n");
+	diff1 = ft_printf("%x", 700);
+	printf("\t");
+	diff2 = printf("%x", 700);
+	printf("\tdiff: %d\n", diff1 - diff2);
+
+	printf("\n");
+	diff1 = ft_printf("%X", 700);
+	printf("\t");
+	diff2 = printf("%X", 700);
+	printf("\tdiff: %d\n", diff1 - diff2);
+
+	printf("\n");
 	diff1 = ft_printf("%%");
 	printf("\t");
 	diff2 = printf("%%");
 	printf("\tdiff: %d\n", diff1 - diff2);
+
 
 	return (0);
 }
