@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 12:15:42 by algasnie          #+#    #+#             */
-/*   Updated: 2025/10/31 15:05:24 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/10/31 15:40:33 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int	ft_numb(int num)
 	return (len);
 }
 
-static int	ft_num_len(unsigned int num, int base_size)
+static int	ft_num_len(unsigned long int num, int base_size)
 {
 	int len;
 
@@ -133,7 +133,7 @@ int	ft_unsigned(unsigned int num)
 	int len;
 	char *c_num;
 
-	len = ft_num_len(num, 10);
+	len = ft_num_len((unsigned long int)num, 10);
 	c_num = malloc(sizeof(char) * (len + 1));
 	if (!c_num)
 		return (-1);
@@ -151,17 +151,17 @@ int	ft_unsigned(unsigned int num)
 	return (len);
 }
 
-int	ft_hex(unsigned int num, char spec)
+int	ft_hex(unsigned long int num, char spec)
 {
 	char *base;
 	char *c_num;
 	int len;
-
+	
 	if (spec == 'X')
 		base = "0123456789ABCDEF";
 	else
 		base = "0123456789abcdef";
-	len = ft_num_len(num, 16);
+	len = ft_num_len((unsigned long int)num, 16);
 	c_num = malloc(sizeof(char) * (len + 1));
 	if (!c_num)
 		return (-1);
@@ -174,6 +174,8 @@ int	ft_hex(unsigned int num, char spec)
 		num /= 16;
 	}
 	len = ft_strlen(c_num);
+	if (spec == 'p')
+		len += write(1, "0x", 2);
 	ft_putstr_fd(c_num, 1);
 	free(c_num);
 	return (len);
@@ -186,10 +188,13 @@ int	ft_pars_speci(char *str, int *i, t_data *data, va_list args)
 	len = 0;
 	if (str[*i] == 'c')
 		len += ft_char(va_arg(args, int));
+
 	else if (str[*i] == 's')
 		len += ft_string(va_arg(args, char *));
-	//else if (str[*i] == 'p')
 
+	else if (str[*i] == 'p')
+		len += ft_hex((unsigned long int)va_arg(args, void *), str[*i]);
+		
 	else if (str[*i] == 'd' || str[*i] == 'i')
 		len += ft_numb(va_arg(args, int));
 
@@ -197,7 +202,7 @@ int	ft_pars_speci(char *str, int *i, t_data *data, va_list args)
 		len += ft_unsigned(va_arg(args, unsigned int));
 
 	else if (str[*i] == 'x' || str[*i] == 'X')
-		len += ft_hex(va_arg(args, unsigned int), str[*i]);
+		len += ft_hex((unsigned long int)va_arg(args, unsigned int), str[*i]);
 	
 	else if (str[*i] == '%')
 		len += ft_char('%');
@@ -284,6 +289,14 @@ int	main(void)
 	diff1 = ft_printf("%d", 256);
 	printf("\t");
 	diff2 = printf("%d", 256);
+	printf("\tdiff: %d\n", diff1 - diff2);
+
+
+	char *ptr = "Alex";
+	printf("\n");
+	diff1 = ft_printf("%p", ptr);
+	printf("\t");
+	diff2 = printf("%p", ptr);
 	printf("\tdiff: %d\n", diff1 - diff2);
 
 	printf("\n");
