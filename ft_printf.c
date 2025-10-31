@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 12:15:42 by algasnie          #+#    #+#             */
-/*   Updated: 2025/10/29 21:14:37 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/10/31 11:37:17 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	ft_init_struct(t_data *data)
 	data->prec = 0;
 }
 
-void	ft_pars_flags(char *str, size_t *i, t_data *data)
+void	ft_pars_flags(char *str, int *i, t_data *data)
 {
 	while (str[*i] == '#' || str[*i] == '-' || str[*i] == '0' || str[*i] == '+' || str[*i] == ' ')
 	{
@@ -47,7 +47,7 @@ void	ft_pars_flags(char *str, size_t *i, t_data *data)
 
 
 //gerer la valeur dynamique ???
-void	ft_pars_width(char *str, size_t *i, t_data *data)
+void	ft_pars_width(char *str, int *i, t_data *data)
 {
 	int	width;
 
@@ -63,7 +63,7 @@ void	ft_pars_width(char *str, size_t *i, t_data *data)
 
 
 //gerer la valeur dynamique ???
-void	ft_pars_preci(char *str, size_t *i, t_data *data)
+void	ft_pars_preci(char *str, int *i, t_data *data)
 {
 	int	prec;
 	
@@ -84,46 +84,70 @@ void	ft_pars_preci(char *str, size_t *i, t_data *data)
 	
 }
 
-int	ft_putchar_mod(char c, t_data *data)
+int ft_char(char c)
 {
-	if (data->minus == 0)
-		write(1, &c, 1);
+	ft_putchar_fd(c, 1);
 	return (1);
 }
 
-int	ft_pars_speci(char *str, size_t *i, t_data *data, va_list args)
+int ft_string(char *s)
+{
+	if (!s)
+		s = "(null)";
+	ft_putstr_fd(s, 1);
+	return (ft_strlen(s));
+}
+
+int	ft_numb(int num)
+{
+	char	*c_num;
+	int	len;
+
+	len = 0;
+	c_num = ft_itoa(num);
+	if (!c_num)
+		return (-1);
+	ft_putstr_fd(c_num, 1);
+	len = ft_strlen(c_num);
+	free(c_num);
+	return (len);
+}
+
+int	ft_pars_speci(char *str, int *i, t_data *data, va_list args)
 {
 	int len;
 
 	len = 0;
 	if (str[*i] == 'c')
-		len += ft_putchar_mod(va_arg(args, int), data);
-	/*else if (str[*i] == 's')
+		len += ft_char(va_arg(args, int));
+	else if (str[*i] == 's')
+		len += ft_string(va_arg(args, char *));
+	//else if (str[*i] == 'p')
 
-	else if (str[*i] == 'p')
+	else if (str[*i] == 'd' || str[*i] == 'i')
+		len += ft_numb(va_arg(args, int));
 
-	else if (str[*i] == 'd')
-
-	else if (str[*i] == 'i')
-
-	else if (str[*i] == 'u')
+	/*else if (str[*i] == 'u')
 
 	else if (str[*i] == 'x')
 
 	else if (str[*i] == 'X')
-
-	else if (str[*i] == '%')*/
+*/
+	else if (str[*i] == '%')
+		len += ft_char('%');
 	
 	else 
 		write(1, &str[*i], 1);
 
+	data->minus = 0;
+	
 	return (len);
 //si le spec n'est pas bon il faut tout afficher
 }
 
-size_t	ft_pars_data(char *str, size_t *i, va_list args)
+int	ft_pars_data(char *str, int *i, va_list args)
 {
-	size_t	len;
+	int	len;
 	t_data	data;
 
 	len = 0;
@@ -132,15 +156,10 @@ size_t	ft_pars_data(char *str, size_t *i, va_list args)
 	ft_pars_width(str, i, &data);
 	ft_pars_preci(str, i, &data);
 	len += ft_pars_speci(str, i, &data, args);
+	//gerer le retour d'erreur à (-1)
 
 
 	return (len);
-}
-
-size_t	ft_char(char c)
-{
-	write(1, &c, 1);
-	return (1);
 }
 
 int	ft_printf(const char *str, ...)
@@ -148,19 +167,25 @@ int	ft_printf(const char *str, ...)
 	va_list	args; //creation list variables
 	va_start(args, str); //fait pointer args apres s
 
-	size_t	i;
-	size_t	len_print;
-	
-	//if (!s)
+	int	i;
+	int	len_print;
+	int	len_func;
+
+	if (!str)
+		return (-1);
 
 	i = 0;
 	len_print = 0;
+	len_func = 0;
 	while (str[i])
 	{
 		if (str[i] == '%')
 		{
 			i++;
-			len_print += ft_pars_data((char *)str, &i, args); //const casté
+			len_func = ft_pars_data((char *)str, &i, args); //const casté
+			if (len_func == -1)
+				return (-1);
+			len_print += len_func;
 		}
 		else
 		{
@@ -178,39 +203,33 @@ int	main(void)
 	int diff2;
 
 	printf("\n");
-	ft_printf("Prints a single character.\n");
 	diff1 = ft_printf("%c", 'c');
 	printf("\t\t");
 	diff2 = printf("%c", 'c');
 	printf("\t\tdiff: %d\n", diff1 - diff2);
 	
 	printf("\n");
-	ft_printf("Prints a string (as defined by the common C convention).\n");
 	diff1 = ft_printf("%s", "Hello, world!");
 	printf("\t");
 	diff2 = printf("%s", "Hello, world!");
 	printf("\tdiff: %d\n", diff1 - diff2);
-	
-	//%p The void * pointer argument has to be printed in hexadecimal format.
 
 	printf("\n");
-	ft_printf("Prints a decimal (base 10) number.\n");
-	diff1 = ft_printf("%d\t", 256);
+	diff1 = ft_printf("%d", 256);
 	printf("\t");
-	diff2 = printf("%d\t", 256);
+	diff2 = printf("%d", 256);
 	printf("\tdiff: %d\n", diff1 - diff2);
-	
-	
-	//%i Prints an integer in base 10.
-	//%u Prints an unsigned decimal (base 10) number.
-	//%x Prints a number in hexadecimal (base 16) lowercase format.
-	//%X Prints a number in hexadecimal (base 16) uppercase format.
-	
+
 	printf("\n");
-	ft_printf("Prints a percent sign.\n");
-	diff1 = ft_printf("%%\t");
+	diff1 = ft_printf("%i", 256);
 	printf("\t");
-	diff2 = printf("%%\t");
+	diff2 = printf("%i", 256);
+	printf("\tdiff: %d\n", diff1 - diff2);
+
+	printf("\n");
+	diff1 = ft_printf("%%");
+	printf("\t");
+	diff2 = printf("%%");
 	printf("\tdiff: %d\n", diff1 - diff2);
 
 	return (0);
