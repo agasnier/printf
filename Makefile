@@ -1,3 +1,3 @@
 all: 
-	clear && cc -Werror -Wextra -Wall ft_printf.c libft/libft.a && ./a.out
+	clear && cc -Werror -Wextra -Wall *.c libft/libft.a && ./a.out
 

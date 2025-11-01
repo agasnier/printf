@@ -6,13 +6,11 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 12:15:42 by algasnie          #+#    #+#             */
-/*   Updated: 2025/10/31 15:40:33 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/01 22:52:23 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include "libft/libft.h"
-
 
 void	ft_init_struct(t_data *data)
 {
@@ -25,218 +23,31 @@ void	ft_init_struct(t_data *data)
 	data->width = 0;
 	data->is_prec = 0;
 	data->prec = 0;
+	data->spec = '\0';
 }
 
-void	ft_pars_flags(char *str, int *i, t_data *data)
-{
-	while (str[*i] == '#' || str[*i] == '-' || str[*i] == '0' || str[*i] == '+' || str[*i] == ' ')
-	{
-		if (str[*i] == '#')
-			data->hash = 1;
-		else if (str[*i] == '-')
-			data->minus = 1;
-		else if (str[*i] == '0')
-			data->zero = 1;
-		else if (str[*i] == '+')
-			data->plus = 1;
-		else if (str[*i] == ' ')
-			data->space = 1;
-		(*i)++;
-	}
-}
-
-
-//gerer la valeur dynamique ???
-void	ft_pars_width(char *str, int *i, t_data *data)
-{
-	int	width;
-
-	width = 0;
-	while (str[*i] >= '0' && str[*i] <= '9')
-	{
-		width *= 10;
-		width += str[*i] - '0';
-		(*i)++;
-	}
-	data->width = width;
-}
-
-
-//gerer la valeur dynamique ???
-void	ft_pars_preci(char *str, int *i, t_data *data)
-{
-	int	prec;
-	
-	if (str[*i] != '.')
-		return ;
-
-	data->is_prec = 1;
-	(*i)++;
-
-	prec = 0;
-	while (str[*i] >= '0' && str[*i] <= '9')
-	{
-		prec *= 10;
-		prec += str[*i] - '0';
-		(*i)++;
-	}
-	data->prec = prec;
-	
-}
-
-int ft_char(char c)
-{
-	ft_putchar_fd(c, 1);
-	return (1);
-}
-
-int ft_string(char *s)
-{
-	if (!s)
-		s = "(null)";
-	ft_putstr_fd(s, 1);
-	return (ft_strlen(s));
-}
-
-int	ft_numb(int num)
-{
-	char	*c_num;
-	int	len;
-
-	len = 0;
-	c_num = ft_itoa(num);
-	if (!c_num)
-		return (-1);
-	ft_putstr_fd(c_num, 1);
-	len = ft_strlen(c_num);
-	free(c_num);
-	return (len);
-}
-
-static int	ft_num_len(unsigned long int num, int base_size)
-{
-	int len;
-
-	len = 0;
-	if (num == 0)
-		return (1);
-	while (num > 0)
-	{
-		num /= base_size;
-		len++;
-	}
-	return (len);
-}
-
-int	ft_unsigned(unsigned int num)
-{
-	int len;
-	char *c_num;
-
-	len = ft_num_len((unsigned long int)num, 10);
-	c_num = malloc(sizeof(char) * (len + 1));
-	if (!c_num)
-		return (-1);
-	c_num[len] = '\0';
-	if (num == 0)
-		c_num[0] = '0';
-	while (num > 0)
-	{
-		c_num[--len] = (num % 10) + '0';
-		num /= 10;
-	}
-	len = ft_strlen(c_num);
-	ft_putstr_fd(c_num, 1);
-	free(c_num);
-	return (len);
-}
-
-int	ft_hex(unsigned long int num, char spec)
-{
-	char *base;
-	char *c_num;
-	int len;
-	
-	if (spec == 'X')
-		base = "0123456789ABCDEF";
-	else
-		base = "0123456789abcdef";
-	len = ft_num_len((unsigned long int)num, 16);
-	c_num = malloc(sizeof(char) * (len + 1));
-	if (!c_num)
-		return (-1);
-	c_num[len] = '\0';
-	if (num == 0)
-		c_num[0] = base[0];
-	while (num > 0)
-	{
-		c_num[--len] = base[num % 16];
-		num /= 16;
-	}
-	len = ft_strlen(c_num);
-	if (spec == 'p')
-		len += write(1, "0x", 2);
-	ft_putstr_fd(c_num, 1);
-	free(c_num);
-	return (len);
-}
-
-int	ft_pars_speci(char *str, int *i, t_data *data, va_list args)
-{
-	int len;
-
-	len = 0;
-	if (str[*i] == 'c')
-		len += ft_char(va_arg(args, int));
-
-	else if (str[*i] == 's')
-		len += ft_string(va_arg(args, char *));
-
-	else if (str[*i] == 'p')
-		len += ft_hex((unsigned long int)va_arg(args, void *), str[*i]);
-		
-	else if (str[*i] == 'd' || str[*i] == 'i')
-		len += ft_numb(va_arg(args, int));
-
-	else if (str[*i] == 'u')
-		len += ft_unsigned(va_arg(args, unsigned int));
-
-	else if (str[*i] == 'x' || str[*i] == 'X')
-		len += ft_hex((unsigned long int)va_arg(args, unsigned int), str[*i]);
-	
-	else if (str[*i] == '%')
-		len += ft_char('%');
-	
-	else 
-		write(1, &str[*i], 1);
-
-	data->minus = 0;
-	
-	return (len);
-//si le spec n'est pas bon il faut tout afficher
-}
-
-int	ft_pars_data(char *str, int *i, va_list args)
+int	ft_operator(char *str, int *i, va_list args)
 {
 	int	len;
 	t_data	data;
+	char *result;
 
 	len = 0;
-	ft_init_struct(&data);
-	ft_pars_flags(str, i, &data);
-	ft_pars_width(str, i, &data);
-	ft_pars_preci(str, i, &data);
-	len += ft_pars_speci(str, i, &data, args);
-	//gerer le retour d'erreur à (-1)
-
-
+	ft_init_struct(&data); //ok
+	ft_pars_flags(str, i, &data); //ok
+	ft_pars_width(str, i, &data); //ok
+	ft_pars_preci(str, i, &data); //ok
+	ft_pars_speci(str, i, &data); //ok
+	result = ft_create_str(&data, args); //ok
+	len = ft_apply_struct(&data, result); 
 	return (len);
+	
 }
 
 int	ft_printf(const char *str, ...)
 {
-	va_list	args; //creation list variables
-	va_start(args, str); //fait pointer args apres s
+	va_list	args;
+	va_start(args, str);
 
 	int	i;
 	int	len_print;
@@ -253,18 +64,16 @@ int	ft_printf(const char *str, ...)
 		if (str[i] == '%')
 		{
 			i++;
-			len_func = ft_pars_data((char *)str, &i, args); //const casté
+			len_func = ft_operator((char *)str, &i, args);
 			if (len_func == -1)
 				return (-1);
 			len_print += len_func;
 		}
 		else
-		{
 			len_print += write(1, &str[i], 1);
-		}
 		i++;
 	}
-	va_end(args); //ferme la list
+	va_end(args);
 	return (len_print);
 }
 
@@ -272,63 +81,288 @@ int	main(void)
 {
 	int diff1;
 	int diff2;
+	char *ptr = "Alex";
 
-	printf("\n");
+	printf("\n========== TESTS DE BASE ==========\n");
+
+	// Test %c
+	printf("\n[%%c]\n");
 	diff1 = ft_printf("%c", 'c');
 	printf("\t\t");
 	diff2 = printf("%c", 'c');
 	printf("\t\tdiff: %d\n", diff1 - diff2);
-	
-	printf("\n");
+
+	// Test %s
+	printf("\n\n");
 	diff1 = ft_printf("%s", "Hello, world!");
 	printf("\t");
 	diff2 = printf("%s", "Hello, world!");
 	printf("\tdiff: %d\n", diff1 - diff2);
 
-	printf("\n");
+	// Test %s NULL
+	printf("\n\n");
+	diff1 = ft_printf("%s", (char *)NULL);
+	printf("\t\t");
+	diff2 = printf("%s", (char *)NULL);
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+
+	// Test %d positif
+	printf("\n[%d positif]\n", '%');
 	diff1 = ft_printf("%d", 256);
-	printf("\t");
+	printf("\t\t");
 	diff2 = printf("%d", 256);
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+
+	// Test %d négatif
+	printf("\n[%d negatif]\n", '%');
+	diff1 = ft_printf("%d", -256);
+	printf("\t\t");
+	diff2 = printf("%d", -256);
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+
+	// Test %d zero
+	printf("\n[%d zero]\n", '%');
+	diff1 = ft_printf("%d", 0);
+	printf("\t\t");
+	diff2 = printf("%d", 0);
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+
+	// Test %i
+	printf("\n[%i]\n", '%');
+	diff1 = ft_printf("%i", 256);
+	printf("\t\t");
+	diff2 = printf("%i", 256);
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+
+	// Test %u
+	printf("\n[%u]\n", '%');
+	diff1 = ft_printf("%u", 256);
+	printf("\t\t");
+	diff2 = printf("%u", 256);
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+
+	// Test %u max
+	printf("\n[%u max]\n", '%');
+	diff1 = ft_printf("%u", 4294967295u);
+	printf("\t");
+	diff2 = printf("%u", 4294967295u);
 	printf("\tdiff: %d\n", diff1 - diff2);
 
+	// Test %x
+	printf("\n[%x]\n", '%');
+	diff1 = ft_printf("%x", 700);
+	printf("\t\t");
+	diff2 = printf("%x", 700);
+	printf("\t\tdiff: %d\n", diff1 - diff2);
 
-	char *ptr = "Alex";
-	printf("\n");
+	// Test %X
+	printf("\n[%X]\n", '%');
+	diff1 = ft_printf("%X", 700);
+	printf("\t\t");
+	diff2 = printf("%X", 700);
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+
+	// Test %p
+	printf("\n\n");
 	diff1 = ft_printf("%p", ptr);
 	printf("\t");
 	diff2 = printf("%p", ptr);
 	printf("\tdiff: %d\n", diff1 - diff2);
 
-	printf("\n");
-	diff1 = ft_printf("%i", 256);
-	printf("\t");
-	diff2 = printf("%i", 256);
-	printf("\tdiff: %d\n", diff1 - diff2);
-
-	printf("\n");
-	diff1 = ft_printf("%u", 256);
-	printf("\t");
-	diff2 = printf("%u", 256);
-	printf("\tdiff: %d\n", diff1 - diff2);
-
-	printf("\n");
-	diff1 = ft_printf("%x", 700);
-	printf("\t");
-	diff2 = printf("%x", 700);
-	printf("\tdiff: %d\n", diff1 - diff2);
-
-	printf("\n");
-	diff1 = ft_printf("%X", 700);
-	printf("\t");
-	diff2 = printf("%X", 700);
-	printf("\tdiff: %d\n", diff1 - diff2);
-
-	printf("\n");
+	// Test %%
+	printf("\n[%%]\n");
 	diff1 = ft_printf("%%");
-	printf("\t");
+	printf("\t\t");
 	diff2 = printf("%%");
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+
+	printf("\n========== TESTS FLAGS # ==========\n");
+
+	// Test %#x
+	printf("\n[%#x]\n", '%');
+	diff1 = ft_printf("%#x", 700);
+	printf("\t\t");
+	diff2 = printf("%#x", 700);
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+
+	// Test %#X
+	printf("\n[%#X]\n", '%');
+	diff1 = ft_printf("%#X", 700);
+	printf("\t\t");
+	diff2 = printf("%#X", 700);
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+
+	// Test %#x avec 0
+	printf("\n[%#x zero]\n", '%');
+	diff1 = ft_printf("%#x", 0);
+	printf("\t\t");
+	diff2 = printf("%#x", 0);
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+
+	printf("\n========== TESTS FLAGS + ==========\n");
+
+	// Test %+d positif
+	printf("\n[%+d positif]\n", '%');
+	diff1 = ft_printf("%+d", 42);
+	printf("\t\t");
+	diff2 = printf("%+d", 42);
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+
+	// Test %+d négatif
+	printf("\n[%+d negatif]\n", '%');
+	diff1 = ft_printf("%+d", -42);
+	printf("\t\t");
+	diff2 = printf("%+d", -42);
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+
+	// Test %+i
+	printf("\n[%+i]\n", '%');
+	diff1 = ft_printf("%+i", 42);
+	printf("\t\t");
+	diff2 = printf("%+i", 42);
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+
+	printf("\n========== TESTS FLAGS ESPACE ==========\n");
+
+	// Test % d positif
+	printf("\n[%% d positif]\n");
+	diff1 = ft_printf("% d", 42);
+	printf("\t\t");
+	diff2 = printf("% d", 42);
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+
+	// Test % d négatif
+	printf("\n[%% d negatif]\n");
+	diff1 = ft_printf("% d", -42);
+	printf("\t\t");
+	diff2 = printf("% d", -42);
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+
+	printf("\n========== TESTS WIDTH ==========\n");
+
+	// Test %10s
+	printf("\n[%%10s]\n");
+	diff1 = ft_printf("%10s", "Hello");
+	printf("\t");
+	diff2 = printf("%10s", "Hello");
 	printf("\tdiff: %d\n", diff1 - diff2);
 
+	// Test %10d
+	printf("\n[%%10d]\n");
+	diff1 = ft_printf("%10d", 42);
+	printf("\t");
+	diff2 = printf("%10d", 42);
+	printf("\tdiff: %d\n", diff1 - diff2);
+
+	// Test %5c
+	printf("\n[%%5c]\n");
+	diff1 = ft_printf("%5c", 'x');
+	printf("\t\t");
+	diff2 = printf("%5c", 'x');
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+
+	printf("\n========== TESTS FLAG - ==========\n");
+
+	// Test %-10s
+	printf("\n[%%-10s]\n");
+	diff1 = ft_printf("%-10s", "Hello");
+	printf("\t");
+	diff2 = printf("%-10s", "Hello");
+	printf("\tdiff: %d\n", diff1 - diff2);
+
+	// Test %-10d
+	printf("\n[%%-10d]\n");
+	diff1 = ft_printf("%-10d", 42);
+	printf("\t");
+	diff2 = printf("%-10d", 42);
+	printf("\tdiff: %d\n", diff1 - diff2);
+
+	printf("\n========== TESTS FLAG 0 ==========\n");
+
+	// Test %010d
+	printf("\n[%%010d]\n");
+	diff1 = ft_printf("%010d", 42);
+	printf("\t");
+	diff2 = printf("%010d", 42);
+	printf("\tdiff: %d\n", diff1 - diff2);
+
+	// Test %05x
+	printf("\n[%%05x]\n");
+	diff1 = ft_printf("%05x", 42);
+	printf("\t\t");
+	diff2 = printf("%05x", 42);
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+
+	printf("\n========== TESTS PRECISION ==========\n");
+
+	// Test %.3s
+	printf("\n[%%.3s]\n");
+	diff1 = ft_printf("%.3s", "Hello");
+	printf("\t\t");
+	diff2 = printf("%.3s", "Hello");
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+
+	// Test %.10s
+	printf("\n[%%.3s]\n");
+	diff1 = ft_printf("%.10s", "Hello");
+	printf("\t\t");
+	diff2 = printf("%.10s", "Hello");
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+
+	// Test %.5d
+	printf("\n[%%.5d]\n");
+	diff1 = ft_printf("%.5d", 42);
+	printf("\t\t");
+	diff2 = printf("%.5d", 42);
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+
+	// Test %.0d avec 0
+	printf("\n[%%.0d zero]\n");
+	diff1 = ft_printf("%.0d", 0);
+	printf("\t\t");
+	diff2 = printf("%.0d", 0);
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+
+	printf("\n========== TESTS COMBINAISONS ==========\n");
+
+	// Test %10.5d
+	printf("\n[%%10.5d]\n");
+	diff1 = ft_printf("%10.5d", 42);
+	printf("\t");
+	diff2 = printf("%10.5d", 42);
+	printf("\tdiff: %d\n", diff1 - diff2);
+
+	// Test %-10.5d
+	printf("\n[%%-10.5d]\n");
+	diff1 = ft_printf("%-10.5d", 42);
+	printf("\t");
+	diff2 = printf("%-10.5d", 42);
+	printf("\tdiff: %d\n", diff1 - diff2);
+
+	// Test %#10x
+	printf("\n[%%#10x]\n");
+	diff1 = ft_printf("%#10x", 42);
+	printf("\t");
+	diff2 = printf("%#10x", 42);
+	printf("\tdiff: %d\n", diff1 - diff2);
+
+	// Test %+10d
+	printf("\n[%%+10d]\n");
+	diff1 = ft_printf("%+10d", 42);
+	printf("\t");
+	diff2 = printf("%+10d", 42);
+	printf("\tdiff: %d\n", diff1 - diff2);
+
+	printf("\n========== TESTS MULTIPLES ==========\n");
+
+	// Test multiple formats
+	printf("\n[Multiple]\n");
+	diff1 = ft_printf("%d %s %x", 42, "test", 255);
+	printf("\t");
+	diff2 = printf("%d %s %x", 42, "test", 255);
+	printf("\tdiff: %d\n", diff1 - diff2);
+
+	printf("\n========================================\n");
 
 	return (0);
 }
