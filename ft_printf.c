@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 12:15:42 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/01 22:52:23 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/02 10:44:17 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,6 +286,13 @@ int	main(void)
 	diff2 = printf("%010d", 42);
 	printf("\tdiff: %d\n", diff1 - diff2);
 
+	// Test %010d
+	printf("\n[%%010d]\n");
+	diff1 = ft_printf("%010d", -42);
+	printf("\t");
+	diff2 = printf("%010d", -42);
+	printf("\tdiff: %d\n", diff1 - diff2);
+
 	// Test %05x
 	printf("\n[%%05x]\n");
 	diff1 = ft_printf("%05x", 42);
@@ -314,6 +321,13 @@ int	main(void)
 	diff1 = ft_printf("%.5d", 42);
 	printf("\t\t");
 	diff2 = printf("%.5d", 42);
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+
+		// Test %.5d
+	printf("\n[%%.5d]\n");
+	diff1 = ft_printf("%.5d", -42);
+	printf("\t\t");
+	diff2 = printf("%.5d", -42);
 	printf("\t\tdiff: %d\n", diff1 - diff2);
 
 	// Test %.0d avec 0
