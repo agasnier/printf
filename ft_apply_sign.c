@@ -1,38 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_format_char.c                                   :+:      :+:    :+:   */
+/*   ft_apply_sign.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/01 17:59:06 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/03 10:17:44 by algasnie         ###   ########.fr       */
+/*   Created: 2025/11/03 10:48:17 by algasnie          #+#    #+#             */
+/*   Updated: 2025/11/03 10:50:38 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-char	*ft_char_str(char c)
+char *ft_apply_sign(t_data *data, char *result)
 {
-	char *str;
+	char *tmp;
 
-	str = malloc(sizeof(char) * 2);
-	if (!str)
-		return (NULL);
-	str[0] = c;
-	str[1] = '\0';
-	return (str);
-}
-
-char	*ft_string(char *s)
-{
-	char *str;
-
-	if (!s)
+	if (result[0] == '-')
+		return (result);
+	
+	if (data->plus)
 	{
-		str = ft_strdup("(null)");
-		return (str);
+		tmp = ft_strjoin("+", result);
+		free(result);
+		return (tmp);
 	}
-	str = ft_strdup(s);
-	return (str);
+
+	if (data->space)
+	{
+		tmp = ft_strjoin(" ", result);
+		free(result);
+		return (tmp);
+	}
+
+	return (result);
 }

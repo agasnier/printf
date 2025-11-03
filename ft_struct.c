@@ -1,16 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pars.c                                          :+:      :+:    :+:   */
+/*   ft_struct.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:58:01 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/01 22:11:03 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/03 09:52:24 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+void	ft_init_struct(t_data *data)
+{
+
+	data->hash = 0;
+	data->minus = 0;
+	data->zero = 0;
+	data->plus = 0;
+	data->space = 0;
+	data->width = 0;
+	data->is_prec = 0;
+	data->prec = 0;
+	data->spec = '\0';
+	data->result = '\0';
+}
 
 void	ft_pars_flags(char *str, int *i, t_data *data)
 {

@@ -6,43 +6,11 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 12:15:42 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/02 10:44:17 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/03 10:54:36 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-
-void	ft_init_struct(t_data *data)
-{
-
-	data->hash = 0;
-	data->minus = 0;
-	data->zero = 0;
-	data->plus = 0;
-	data->space = 0;
-	data->width = 0;
-	data->is_prec = 0;
-	data->prec = 0;
-	data->spec = '\0';
-}
-
-int	ft_operator(char *str, int *i, va_list args)
-{
-	int	len;
-	t_data	data;
-	char *result;
-
-	len = 0;
-	ft_init_struct(&data); //ok
-	ft_pars_flags(str, i, &data); //ok
-	ft_pars_width(str, i, &data); //ok
-	ft_pars_preci(str, i, &data); //ok
-	ft_pars_speci(str, i, &data); //ok
-	result = ft_create_str(&data, args); //ok
-	len = ft_apply_struct(&data, result); 
-	return (len);
-	
-}
 
 int	ft_printf(const char *str, ...)
 {
@@ -84,7 +52,14 @@ int	main(void)
 	char *ptr = "Alex";
 
 	printf("\n========== TESTS DE BASE ==========\n");
-
+	// Test string seule
+	printf("\n[%%c]\n");
+	diff1 = ft_printf("Alexandre");
+	printf("\t\t");
+	diff2 = printf("Alexandre");
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+	
+		
 	// Test %c
 	printf("\n[%%c]\n");
 	diff1 = ft_printf("%c", 'c');
@@ -100,11 +75,11 @@ int	main(void)
 	printf("\tdiff: %d\n", diff1 - diff2);
 
 	// Test %s NULL
-	printf("\n\n");
+	/*printf("\n\n");
 	diff1 = ft_printf("%s", (char *)NULL);
 	printf("\t\t");
 	diff2 = printf("%s", (char *)NULL);
-	printf("\t\tdiff: %d\n", diff1 - diff2);
+	printf("\t\tdiff: %d\n", diff1 - diff2);*/
 
 	// Test %d positif
 	printf("\n[%d positif]\n", '%');

@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:58:18 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/01 18:01:36 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/03 10:34:21 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ char	*ft_numb(int num)
 	if (!c_num)
 		return (NULL);
 	return (c_num);
-	
 }
 
 int	ft_num_len(unsigned long int num, int base_size)

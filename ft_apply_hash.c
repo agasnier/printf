@@ -1,38 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_format_char.c                                   :+:      :+:    :+:   */
+/*   ft_apply_hash.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/01 17:59:06 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/03 10:17:44 by algasnie         ###   ########.fr       */
+/*   Created: 2025/11/03 10:50:01 by algasnie          #+#    #+#             */
+/*   Updated: 2025/11/03 10:50:56 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-char	*ft_char_str(char c)
+char *ft_apply_hash(t_data *data, char *result)
 {
-	char *str;
+	char *tmp;
 
-	str = malloc(sizeof(char) * 2);
-	if (!str)
-		return (NULL);
-	str[0] = c;
-	str[1] = '\0';
-	return (str);
-}
-
-char	*ft_string(char *s)
-{
-	char *str;
-
-	if (!s)
-	{
-		str = ft_strdup("(null)");
-		return (str);
-	}
-	str = ft_strdup(s);
-	return (str);
+	if (!data->hash || (data->spec != 'x' && data->spec != 'X'))
+		return (result);
+	if (result[0] == '0' && result[1] == '\0')
+		return (result);
+	if (data->spec == 'x')
+		tmp = ft_strjoin("0x", result);
+	if (data->spec == 'X')
+		tmp = ft_strjoin("0X", result);
+	free(result);
+	return(tmp);
 }
