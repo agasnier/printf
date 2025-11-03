@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 15:02:57 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/03 15:44:13 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/03 17:06:29 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,38 @@ int	main(void)
 {
 	int diff1;
 	int diff2;
-	char *ptr = "Alex";
+	
+	diff1 = ft_printf("|| %c %c %c |", '0', 0, '1');
+	printf("\t\t");
+	diff2 = printf("| %c %c %c |", '0', 0, '1');
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+
+	
+	diff1 = ft_printf("| %c %c %c |", '2', '1', 0);
+	printf("\t\t");
+	diff2 = printf("| %c %c %c |", '2', '1', 0);
+	printf("\t\tdiff: %d\n", diff1 - diff2);
+
+	diff1 = ft_printf("| %c %c %c |", 0, '1', '2');
+	printf("\t\t");
+	diff2 = printf("| %c %c %c |", 0, '1', '2');
+	printf("\t\tdiff: %d\n", diff1 - diff2);	
+	
+	diff1 = ft_printf(" |%p| |%p| ", NULL, NULL);
+	printf("\t\t");
+	diff2 = printf(" |%p| |%p| ", NULL, NULL);
+	printf("\t\tdiff: %d\n", diff1 - diff2);	
+
+	diff1 = ft_printf("%%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%%%%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %c%%", 'A', "42", 42, 42 ,42 , 42, 42, 'B', "-42", -42, -42 ,-42 ,-42, 42, 'C', "0", 0, 0 ,0, 0, 42, 0);
+	printf("\t\t");
+	diff2 = printf("%%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%%%%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %c%%", 'A', "42", 42, 42 ,42 , 42, 42, 'B', "-42", -42, -42 ,-42 ,-42, 42, 'C', "0", 0, 0 ,0, 0, 42, 0);
+	printf("\t\tdiff: %d\n", diff1 - diff2);		
+
+
+
+	
+
+	/*char *ptr = "Alex";
 
 	printf("\n========== TESTS DE BASE ==========\n");
 	// Test string seule
@@ -359,7 +390,7 @@ int	main(void)
 	diff1 = ft_printf(NULL, 42);
 	printf("\t");
 	diff2 = printf(NULL, 42);
-	printf("\tdiff: %d\n", diff1 - diff2);
+	printf("\tdiff: %d\n", diff1 - diff2);*/
 
 	return (0);
 }

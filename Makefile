@@ -66,13 +66,13 @@ OBJS_libft = $(SRCS_libft:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJS) $(OBJS_libft)
-	ar rcs $(NAME) $(OBJS) $(OBJ_libft)
+	ar rcs $(NAME) $(OBJS) $(OBJS_libft)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rf $(OBJS) $(OBJ_libft)
+	rm -rf $(OBJS) $(OBJS_libft)
 
 fclean: clean
 	rm -rf $(NAME)
@@ -81,7 +81,7 @@ re: fclean all
 
 .PHONY: all clean fclean re bonus
 
-test: all 
+test:
 	clear && cc -Werror -Wextra -Wall main.c ft_printf.a libft/libft.a && ./a.out
 
 

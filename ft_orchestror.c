@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:59:02 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/03 15:45:38 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/03 17:03:53 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	ft_apply_struct(t_data *data)
 
 void	ft_create_str(t_data *data, va_list args)
 {
+	
 	if (data->spec == 'c')
 		data->result = ft_char_str(va_arg(args, int));
 	else if (data->spec == '%')
