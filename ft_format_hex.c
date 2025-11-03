@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:59:09 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/03 16:51:23 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/03 21:09:29 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@ static char	*ft_hex_pointeur(char *c_num)
 {
 	char	*hex;
 
-	hex = ft_strjoin("0x", c_num);
+	if (c_num[0] == '0' && c_num[1] == '\0')
+		hex = ft_strdup("(nil)");
+	else
+		hex = ft_strjoin("0x", c_num);
 	free(c_num);
 	return (hex);
 }

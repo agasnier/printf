@@ -81,8 +81,8 @@ re: fclean all
 
 .PHONY: all clean fclean re bonus
 
-test:
-	clear && cc -Werror -Wextra -Wall main.c ft_printf.a libft/libft.a && ./a.out
+test: re
+	clear && cc -Werror -Wextra -Wall main.c libftprintf.a && ./a.out
 
 
 

@@ -6,391 +6,525 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 15:02:57 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/03 17:06:29 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/03 21:40:00 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+#include <stdio.h>
+#include <string.h>
+#include <limits.h>
 
-int	main(void)
+int main(void)
 {
-	int diff1;
-	int diff2;
-	
-	diff1 = ft_printf("|| %c %c %c |", '0', 0, '1');
-	printf("\t\t");
-	diff2 = printf("| %c %c %c |", '0', 0, '1');
-	printf("\t\tdiff: %d\n", diff1 - diff2);
+	int ret1, ret2;
+	char *ptr = "Hello";
 
-	
-	diff1 = ft_printf("| %c %c %c |", '2', '1', 0);
-	printf("\t\t");
-	diff2 = printf("| %c %c %c |", '2', '1', 0);
-	printf("\t\tdiff: %d\n", diff1 - diff2);
+	printf("\n════════════════════════════════════════════════════════════════════════════\n");
+	printf("                       FT_PRINTF COMPREHENSIVE TEST\n");
+	printf("════════════════════════════════════════════════════════════════════════════\n\n");
 
-	diff1 = ft_printf("| %c %c %c |", 0, '1', '2');
-	printf("\t\t");
-	diff2 = printf("| %c %c %c |", 0, '1', '2');
-	printf("\t\tdiff: %d\n", diff1 - diff2);	
-	
-	diff1 = ft_printf(" |%p| |%p| ", NULL, NULL);
-	printf("\t\t");
-	diff2 = printf(" |%p| |%p| ", NULL, NULL);
-	printf("\t\tdiff: %d\n", diff1 - diff2);	
-
-	diff1 = ft_printf("%%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%%%%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %c%%", 'A', "42", 42, 42 ,42 , 42, 42, 'B', "-42", -42, -42 ,-42 ,-42, 42, 'C', "0", 0, 0 ,0, 0, 42, 0);
-	printf("\t\t");
-	diff2 = printf("%%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%%%%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %%%c%%%s%%%d%%%i%%%u%%%x%%%X%%%% %c%%", 'A', "42", 42, 42 ,42 , 42, 42, 'B', "-42", -42, -42 ,-42 ,-42, 42, 'C', "0", 0, 0 ,0, 0, 42, 0);
-	printf("\t\tdiff: %d\n", diff1 - diff2);		
-
-
-
-	
-
-	/*char *ptr = "Alex";
-
-	printf("\n========== TESTS DE BASE ==========\n");
-	// Test string seule
-	printf("\n[%%c]\n");
-	diff1 = ft_printf("Alexandre");
-	printf("\t\t");
-	diff2 = printf("Alexandre");
-	printf("\t\tdiff: %d\n", diff1 - diff2);
-	
-		
-	// Test %c
-	printf("\n[%%c]\n");
-	diff1 = ft_printf("%c", 'c');
-	printf("\t\t");
-	diff2 = printf("%c", 'c');
-	printf("\t\tdiff: %d\n", diff1 - diff2);
-
-	// Test %s
+	// Test %c normal
+	printf("Test: %%c normal\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%c", 'A');
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%c", 'A');
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
 	printf("\n\n");
-	diff1 = ft_printf("%s", "Hello, world!");
-	printf("\t");
-	diff2 = printf("%s", "Hello, world!");
-	printf("\tdiff: %d\n", diff1 - diff2);
+
+	// Test %c null
+	printf("Test: %%c null\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%c", 0);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%c", 0);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
+
+	// Test %s normal
+	printf("Test: %%s normal\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%s", "Hello");
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%s", "Hello");
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
 	// Test %s NULL
+	printf("Test: %%s NULL\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%s", (char *)NULL);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%s", (char *)NULL);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
 	printf("\n\n");
-	diff1 = ft_printf("%s", (char *)NULL);
-	printf("\t\t");
-	diff2 = printf("%s", (char *)NULL);
-	printf("\t\tdiff: %d\n", diff1 - diff2);
 
-	// Test %d positif
-	printf("\n[%d positif]\n", '%');
-	diff1 = ft_printf("%d", 256);
-	printf("\t\t");
-	diff2 = printf("%d", 256);
-	printf("\t\tdiff: %d\n", diff1 - diff2);
+	// Test %s empty
+	printf("Test: %%s empty\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%s", "");
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%s", "");
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	// Test %d négatif
-	printf("\n[%d negatif]\n", '%');
-	diff1 = ft_printf("%d", -256);
-	printf("\t\t");
-	diff2 = printf("%d", -256);
-	printf("\t\tdiff: %d\n", diff1 - diff2);
+	// Test %d positive
+	printf("Test: %%d positive (42)\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%d", 42);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%d", 42);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
+
+	// Test %d negative
+	printf("Test: %%d negative (-42)\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%d", -42);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%d", -42);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
 	// Test %d zero
-	printf("\n[%d zero]\n", '%');
-	diff1 = ft_printf("%d", 0);
-	printf("\t\t");
-	diff2 = printf("%d", 0);
-	printf("\t\tdiff: %d\n", diff1 - diff2);
+	printf("Test: %%d zero\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%d", 0);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%d", 0);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
+
+	// Test %d INT_MAX
+	printf("Test: %%d INT_MAX\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%d", INT_MAX);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%d", INT_MAX);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
+
+	// Test %d INT_MIN
+	printf("Test: %%d INT_MIN\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%d", INT_MIN);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%d", INT_MIN);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
 	// Test %i
-	printf("\n[%i]\n", '%');
-	diff1 = ft_printf("%i", 256);
-	printf("\t\t");
-	diff2 = printf("%i", 256);
-	printf("\t\tdiff: %d\n", diff1 - diff2);
+	printf("Test: %%i (42)\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%i", 42);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%i", 42);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
 	// Test %u
-	printf("\n[%u]\n", '%');
-	diff1 = ft_printf("%u", 256);
-	printf("\t\t");
-	diff2 = printf("%u", 256);
-	printf("\t\tdiff: %d\n", diff1 - diff2);
+	printf("Test: %%u (42)\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%u", 42);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%u", 42);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	// Test %u max
-	printf("\n[%u max]\n", '%');
-	diff1 = ft_printf("%u", 4294967295u);
-	printf("\t");
-	diff2 = printf("%u", 4294967295u);
-	printf("\tdiff: %d\n", diff1 - diff2);
+	// Test %u zero
+	printf("Test: %%u zero\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%u", 0);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%u", 0);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
+
+	// Test %u UINT_MAX
+	printf("Test: %%u UINT_MAX\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%u", UINT_MAX);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%u", UINT_MAX);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
 	// Test %x
-	printf("\n[%x]\n", '%');
-	diff1 = ft_printf("%x", 700);
-	printf("\t\t");
-	diff2 = printf("%x", 700);
-	printf("\t\tdiff: %d\n", diff1 - diff2);
+	printf("Test: %%x (255)\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%x", 255);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%x", 255);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
+
+	// Test %x zero
+	printf("Test: %%x zero\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%x", 0);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%x", 0);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
 	// Test %X
-	printf("\n[%X]\n", '%');
-	diff1 = ft_printf("%X", 700);
-	printf("\t\t");
-	diff2 = printf("%X", 700);
-	printf("\t\tdiff: %d\n", diff1 - diff2);
+	printf("Test: %%X (255)\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%X", 255);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%X", 255);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
 	// Test %p
+	printf("Test: %%p (pointer)\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%p", ptr);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%p", ptr);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
 	printf("\n\n");
-	diff1 = ft_printf("%p", ptr);
-	printf("\t");
-	diff2 = printf("%p", ptr);
-	printf("\tdiff: %d\n", diff1 - diff2);
+
+	// Test %p NULL
+	printf("Test: %%p NULL\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%p", NULL);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%p", NULL);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
 	// Test %%
-	printf("\n[%%]\n");
-	diff1 = ft_printf("%%");
-	printf("\t\t");
-	diff2 = printf("%%");
-	printf("\t\tdiff: %d\n", diff1 - diff2);
+	printf("Test: %%%%\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%%");
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%%");
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	printf("\n========== TESTS FLAGS # ==========\n");
+	// Test with width
+	printf("Test: |%%10s| with 'Hi'\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("|%10s|", "Hi");
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("|%10s|", "Hi");
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	// Test %#x
-	printf("\n[%#x]\n", '%');
-	diff1 = ft_printf("%#x", 700);
-	printf("\t\t");
-	diff2 = printf("%#x", 700);
-	printf("\t\tdiff: %d\n", diff1 - diff2);
+	printf("Test: |%%10d| with 42\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("|%10d|", 42);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("|%10d|", 42);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	// Test %#X
-	printf("\n[%#X]\n", '%');
-	diff1 = ft_printf("%#X", 700);
-	printf("\t\t");
-	diff2 = printf("%#X", 700);
-	printf("\t\tdiff: %d\n", diff1 - diff2);
+	printf("Test: |%%-10s| with 'Hi'\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("|%-10s|", "Hi");
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("|%-10s|", "Hi");
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	// Test %#x avec 0
-	printf("\n[%#x zero]\n", '%');
-	diff1 = ft_printf("%#x", 0);
-	printf("\t\t");
-	diff2 = printf("%#x", 0);
-	printf("\t\tdiff: %d\n", diff1 - diff2);
+	printf("Test: |%%-10d| with 42\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("|%-10d|", 42);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("|%-10d|", 42);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	printf("\n========== TESTS FLAGS + ==========\n");
+	// Test with zero padding
+	printf("Test: |%%010d| with 42\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("|%010d|", 42);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("|%010d|", 42);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	// Test %+d positif
-	printf("\n[%+d positif]\n", '%');
-	diff1 = ft_printf("%+d", 42);
-	printf("\t\t");
-	diff2 = printf("%+d", 42);
-	printf("\t\tdiff: %d\n", diff1 - diff2);
+	printf("Test: |%%010d| with -42\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("|%010d|", -42);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("|%010d|", -42);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	// Test %+d négatif
-	printf("\n[%+d negatif]\n", '%');
-	diff1 = ft_printf("%+d", -42);
-	printf("\t\t");
-	diff2 = printf("%+d", -42);
-	printf("\t\tdiff: %d\n", diff1 - diff2);
+	// Test with precision
+	printf("Test: |%%.3s| with 'Hello'\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("|%.3s|", "Hello");
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("|%.3s|", "Hello");
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	// Test %+i
-	printf("\n[%+i]\n", '%');
-	diff1 = ft_printf("%+i", 42);
-	printf("\t\t");
-	diff2 = printf("%+i", 42);
-	printf("\t\tdiff: %d\n", diff1 - diff2);
+	printf("Test: |%%.0s| with 'Hello'\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("|%.0s|", "Hello");
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("|%.0s|", "Hello");
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	printf("\n========== TESTS FLAGS ESPACE ==========\n");
+	printf("Test: |%%.5d| with 42\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("|%.5d|", 42);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("|%.5d|", 42);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	// Test % d positif
-	printf("\n[%% d positif]\n");
-	diff1 = ft_printf("% d", 42);
-	printf("\t\t");
-	diff2 = printf("% d", 42);
-	printf("\t\tdiff: %d\n", diff1 - diff2);
+	printf("Test: |%%.5d| with -42\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("|%.5d|", -42);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("|%.5d|", -42);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	// Test % d négatif
-	printf("\n[%% d negatif]\n");
-	diff1 = ft_printf("% d", -42);
-	printf("\t\t");
-	diff2 = printf("% d", -42);
-	printf("\t\tdiff: %d\n", diff1 - diff2);
+	printf("Test: |%%.0d| with 0\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("|%.0d|", 0);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("|%.0d|", 0);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	printf("\n========== TESTS WIDTH ==========\n");
+	// Test with +
+	printf("Test: %%+d with 42\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%+d", 42);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%+d", 42);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	// Test %10s
-	printf("\n[%%10s]\n");
-	diff1 = ft_printf("%10s", "Hello");
-	printf("\t");
-	diff2 = printf("%10s", "Hello");
-	printf("\tdiff: %d\n", diff1 - diff2);
+	printf("Test: %%+d with -42\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%+d", -42);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%+d", -42);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	// Test %10d
-	printf("\n[%%10d]\n");
-	diff1 = ft_printf("%10d", 42);
-	printf("\t");
-	diff2 = printf("%10d", 42);
-	printf("\tdiff: %d\n", diff1 - diff2);
+	printf("Test: %%+d with 0\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%+d", 0);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%+d", 0);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	// Test %5c
-	printf("\n[%%5c]\n");
-	diff1 = ft_printf("%5c", 'x');
-	printf("\t\t");
-	diff2 = printf("%5c", 'x');
-	printf("\t\tdiff: %d\n", diff1 - diff2);
+	// Test with space
+	printf("Test: %% d with 42\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("% d", 42);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("% d", 42);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	printf("\n========== TESTS FLAG - ==========\n");
+	printf("Test: %% d with -42\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("% d", -42);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("% d", -42);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	// Test %-10s
-	printf("\n[%%-10s]\n");
-	diff1 = ft_printf("%-10s", "Hello");
-	printf("\t");
-	diff2 = printf("%-10s", "Hello");
-	printf("\tdiff: %d\n", diff1 - diff2);
+	// Test with #
+	printf("Test: %%#x with 255\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%#x", 255);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%#x", 255);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	// Test %-10d
-	printf("\n[%%-10d]\n");
-	diff1 = ft_printf("%-10d", 42);
-	printf("\t");
-	diff2 = printf("%-10d", 42);
-	printf("\tdiff: %d\n", diff1 - diff2);
+	printf("Test: %%#X with 255\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%#X", 255);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%#X", 255);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	printf("\n========== TESTS FLAG 0 ==========\n");
+	printf("Test: %%#x with 0\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%#x", 0);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%#x", 0);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	// Test %010d
-	printf("\n[%%010d]\n");
-	diff1 = ft_printf("%010d", 42);
-	printf("\t");
-	diff2 = printf("%010d", 42);
-	printf("\tdiff: %d\n", diff1 - diff2);
+	// Combinations
+	printf("Test: |%%10.5d| with 42\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("|%10.5d|", 42);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("|%10.5d|", 42);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	// Test %010d
-	printf("\n[%%010d]\n");
-	diff1 = ft_printf("%010d", -42);
-	printf("\t");
-	diff2 = printf("%010d", -42);
-	printf("\tdiff: %d\n", diff1 - diff2);
+	printf("Test: |%%-10.5d| with 42\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("|%-10.5d|", 42);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("|%-10.5d|", 42);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	// Test %010d
-	printf("\n[%%+010d]\n");
-	diff1 = ft_printf("%+010d", 42);
-	printf("\t");
-	diff2 = printf("%+010d", 42);
-	printf("\tdiff: %d\n", diff1 - diff2);
+	printf("Test: |%%#10x| with 42\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("|%#10x|", 42);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("|%#10x|", 42);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	// Test % 010d
-	printf("\n[%% 010d]\n");
-	diff1 = ft_printf("% 010d", 42);
-	printf("\t");
-	diff2 = printf("% 010d", 42);
-	printf("\tdiff: %d\n", diff1 - diff2);
+	printf("Test: |%%+010d| with 42\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("|%+010d|", 42);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("|%+010d|", 42);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	// Test %05x
-	printf("\n[%%05x]\n");
-	diff1 = ft_printf("%05x", 42);
-	printf("\t\t");
-	diff2 = printf("%05x", 42);
-	printf("\t\tdiff: %d\n", diff1 - diff2);
+	printf("Test: |%% 010d| with 42\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("|% 010d|", 42);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("|% 010d|", 42);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-		// Test %05x
-	printf("\n[%%05x]\n");
-	diff1 = ft_printf("%x", 42);
-	printf("\t\t");
-	diff2 = printf("%x", 42);
-	printf("\t\tdiff: %d\n", diff1 - diff2);
+	// Mix
+	printf("Test: %%d %%s %%x mixed\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("%d %s %x", 42, "test", 255);
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("%d %s %x", 42, "test", 255);
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	printf("\n========== TESTS PRECISION ==========\n");
+	printf("Test: No format specifiers\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("Hello World");
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("Hello World");
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	// Test %.3s
-	printf("\n[%%.0s]\n");
-	diff1 = ft_printf("%.0s", "Hello");
-	printf("\t\t");
-	diff2 = printf("%.0s", "Hello");
-	printf("\t\tdiff: %d\n", diff1 - diff2);
-	
-	// Test %.3s
-	printf("\n[%%.3s]\n");
-	diff1 = ft_printf("%.3s", "Hello");
-	printf("\t\t");
-	diff2 = printf("%.3s", "Hello");
-	printf("\t\tdiff: %d\n", diff1 - diff2);
+	printf("Test: Empty string\n");
+	printf("ft_printf: ");
+	ret1 = ft_printf("");
+	printf("%*s", 30 - ret1, "");
+	printf("printf: ");
+	ret2 = printf("");
+	if (ret1 != ret2) printf("  [FAIL %d vs %d]", ret1, ret2);
+	else printf("  [OK]");
+	printf("\n\n");
 
-	// Test %.10s
-	printf("\n[%%.3s]\n");
-	diff1 = ft_printf("%.10s", "Hello");
-	printf("\t\t");
-	diff2 = printf("%.10s", "Hello");
-	printf("\t\tdiff: %d\n", diff1 - diff2);
+	printf("════════════════════════════════════════════════════════════════════════════\n");
+	printf("                          Tests completed\n");
+	printf("════════════════════════════════════════════════════════════════════════════\n\n");
 
-		// Test %.3s
-	printf("\n[%%.0d]\n");
-	diff1 = ft_printf("%.0d", 42);
-	printf("\t\t");
-	diff2 = printf("%.0d", 42);
-	printf("\t\tdiff: %d\n", diff1 - diff2);
-	
-	// Test %.5d
-	printf("\n[%%.5d]\n");
-	diff1 = ft_printf("%.5d", 42);
-	printf("\t\t");
-	diff2 = printf("%.5d", 42);
-	printf("\t\tdiff: %d\n", diff1 - diff2);
-
-		// Test %.5d
-	printf("\n[%%.5d]\n");
-	diff1 = ft_printf("%.5d", -42);
-	printf("\t\t");
-	diff2 = printf("%.5d", -42);
-	printf("\t\tdiff: %d\n", diff1 - diff2);
-
-	// Test %.0d avec 0
-	printf("\n[%%.0d zero]\n");
-	diff1 = ft_printf("%.0d", 0);
-	printf("\t\t");
-	diff2 = printf("%.0d", 0);
-	printf("\t\tdiff: %d\n", diff1 - diff2);
-
-	printf("\n========== TESTS COMBINAISONS ==========\n");
-
-	// Test %10.5d
-	printf("\n[%%10.5d]\n");
-	diff1 = ft_printf("%10.5d", 42);
-	printf("\t");
-	diff2 = printf("%10.5d", 42);
-	printf("\tdiff: %d\n", diff1 - diff2);
-
-	// Test %-10.5d
-	printf("\n[%%-10.5d]\n");
-	diff1 = ft_printf("%-10.5d", 42);
-	printf("\t");
-	diff2 = printf("%-10.5d", 42);
-	printf("\tdiff: %d\n", diff1 - diff2);
-
-	// Test %#10x
-	printf("\n[%%#10x]\n");
-	diff1 = ft_printf("%#10x", 42);
-	printf("\t");
-	diff2 = printf("%#10x", 42);
-	printf("\tdiff: %d\n", diff1 - diff2);
-
-	// Test %+10d
-	printf("\n[%%+10d]\n");
-	diff1 = ft_printf("%+10d", 42);
-	printf("\t");
-	diff2 = printf("%+10d", 42);
-	printf("\tdiff: %d\n", diff1 - diff2);
-
-	printf("\n========== TESTS MULTIPLES ==========\n");
-
-	// Test multiple formats
-	printf("\n[Multiple]\n");
-	diff1 = ft_printf("%d %s %x", 42, "test", 255);
-	printf("\t");
-	diff2 = printf("%d %s %x", 42, "test", 255);
-	printf("\tdiff: %d\n", diff1 - diff2);
-
-	printf("\n========================================\n");
-
-	printf("\n[Multiple]\n");
-	diff1 = ft_printf(NULL, 42);
-	printf("\t");
-	diff2 = printf(NULL, 42);
-	printf("\tdiff: %d\n", diff1 - diff2);*/
-
-	return (0);
+	return 0;
 }

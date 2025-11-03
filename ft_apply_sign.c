@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 10:48:17 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/03 15:20:06 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/03 20:52:48 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,12 @@ void	ft_apply_sign(t_data *data)
 	if (data->plus)
 	{
 		tmp = ft_strjoin("+", data->result);
-		if (!tmp)
-			data->result = NULL;
 		free(data->result);
 		data->result = tmp;
 	}
-	if (data->space)
+	else if (data->space)
 	{
 		tmp = ft_strjoin(" ", data->result);
-		if (!tmp)
-			data->result = NULL;
 		free(data->result);
 		data->result = tmp;
 	}

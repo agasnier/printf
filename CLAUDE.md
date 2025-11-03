@@ -4,64 +4,104 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a 42 School project implementing a custom printf function (`ft_printf`) that mimics the behavior of the standard C library's printf function. The implementation uses variadic functions (va_list, va_start, va_arg) to handle variable arguments.
+This is a `ft_printf` implementation - a custom recreation of the C standard library's `printf` function, part of the 42 school curriculum. The project produces a static library `libftprintf.a` that can be linked with other programs.
 
-## Build and Test Commands
+## Build Commands
 
 ```bash
-# Build and run (compiles with all flags and executes immediately)
+# Build the library
 make
 
-# Manual compilation
-cc -Werror -Wextra -Wall ft_printf.c libft/libft.a
+# Clean object files
+make clean
 
-# Run the compiled program
-./a.out
+# Clean everything (objects + library)
+make fclean
+
+# Rebuild from scratch
+make re
+
+# Run tests (requires main.c and ft_printf.a)
+make test
 ```
 
-The Makefile automatically clears the terminal, compiles with strict flags (`-Werror -Wextra -Wall`), and runs the executable.
+**Important**: The Makefile currently has an issue - it references libft source files that were deleted from git but still exist in the working directory. The libft files are present but marked as deleted in git status.
 
 ## Architecture
 
-### Core Structure
+### Core Flow
+The printf implementation follows a multi-stage pipeline:
 
-- **ft_printf.c**: Main implementation file containing:
-  - `ft_printf()`: Main variadic function that parses format string and dispatches to format handlers
-  - Format handler functions: `ft_char()`, `ft_str()`, `ft_integer()`, `ft_pourcent()`
-  - `main()`: Test suite that compares ft_printf output with standard printf
+1. **Entry Point** (`ft_printf.c`):
+   - `ft_printf()` - Main function, handles variadic arguments
+   - `ft_printf_helper()` - Parses format string, delegates to orchestrator
 
-- **libft/**: Pre-built static library containing utility functions
-  - `libft.a`: Compiled static library
-  - `libft.h`: Header with string manipulation, memory, and conversion functions
-  - Key dependencies used by ft_printf: `ft_itoa()`, `ft_putstr_fd()`, `ft_strlen()`
+2. **Format String Parsing** (`ft_orchestror.c`):
+   - `ft_operator()` - Orchestrates the entire conversion process for each format specifier
+   - `ft_create_str()` - Dispatches to appropriate formatter based on specifier
+   - `ft_apply_struct()` - Applies flags in correct precedence order
 
-### Current Implementation Status
+3. **Struct Management** (`ft_struct.c`):
+   - `ft_init_struct()` - Initializes format data structure
+   - `ft_pars_flags()` - Parses flags: `#`, `-`, `0`, `+`, ` `
+   - `ft_pars_width()` - Parses field width
+   - `ft_pars_preci()` - Parses precision (`.`)
+   - `ft_pars_speci()` - Identifies conversion specifier
 
-**Implemented format specifiers:**
-- `%c`: Single character (via `ft_char`)
-- `%s`: String (via `ft_str`)
-- `%d`: Decimal integer (via `ft_integer`)
-- `%%`: Literal percent sign (via `ft_pourcent`)
+4. **Format Conversions**:
+   - `ft_format_char.c` - Handles `%c`, `%s`, `%%`
+   - `ft_format_num.c` - Handles `%d`, `%i`, `%u`
+   - `ft_format_hex.c` - Handles `%x`, `%X`, `%p`
 
-**Not yet implemented:**
-- `%p`: Pointer in hexadecimal
-- `%i`: Integer in base 10
-- `%u`: Unsigned decimal
-- `%x`: Hexadecimal lowercase
-- `%X`: Hexadecimal uppercase
+5. **Flag Application** (applied in specific order):
+   - `ft_apply_precision.c` - Applies precision to numbers/strings
+   - `ft_apply_sign.c` - Applies `+` or space flag
+   - `ft_apply_hash.c` - Applies `#` flag (0x prefix)
+   - `ft_apply_width.c` - Applies field width with padding
 
-### Function Flow
+### Key Data Structure
 
-The `ft_printf` function iterates through the format string character by character. When it encounters a `%`, it checks the next character to determine the format specifier and calls the appropriate handler function. Each handler:
-1. Processes the variadic argument via `va_arg()`
-2. Outputs to stdout (fd 1)
-3. Returns the number of characters printed
+```c
+typedef struct s_data {
+    int     hash;      // # flag
+    int     minus;     // - flag (left-justify)
+    int     zero;      // 0 flag (zero-padding)
+    int     plus;      // + flag (force sign)
+    int     space;     // space flag
+    int     width;     // field width
+    int     is_prec;   // precision specified
+    int     prec;      // precision value
+    char    spec;      // conversion specifier
+    char    *result;   // formatted output string
+} t_data;
+```
 
-The function tracks total characters printed in `len_print` and returns this count.
+### Flag Precedence Rules
 
-## Important Notes
+Implemented in `ft_apply_struct()`:
+- `-` (minus) overrides `0` (zero-padding)
+- `+` (plus) overrides ` ` (space)
+- Application order: precision → sign → hash → width
 
-- All compilation must use `-Werror -Wextra -Wall` flags (42 standard)
-- The main function contains test comparisons against standard printf to verify correctness
-- Memory management: `ft_integer` allocates memory via `ft_itoa` and must free it
-- The libft library is pre-compiled; source files are not in this directory
+### Supported Format Specifiers
+
+- `%c` - Character
+- `%s` - String
+- `%p` - Pointer (hex with 0x prefix)
+- `%d`, `%i` - Signed decimal integer
+- `%u` - Unsigned decimal integer
+- `%x` - Lowercase hexadecimal
+- `%X` - Uppercase hexadecimal
+- `%%` - Literal percent sign
+
+## Dependencies
+
+- **libft**: Custom C standard library implementation located in `libft/` subdirectory
+- Includes utility functions used throughout ft_printf (ft_strlen, ft_itoa, memory functions, etc.)
+
+## Code Style
+
+- 42 school norminette compliance required
+- Headers must include the standard 42 header comment block
+- No more than 25 lines per function
+- Maximum 80 characters per line

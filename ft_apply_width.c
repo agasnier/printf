@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 10:51:17 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/03 15:25:10 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/03 19:12:30 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static void	ft_apply_width_right(t_data *data, char *padding)
 	char	*tmp;
 
 	tmp = ft_strjoin(data->result, padding);
+	free(padding);
 	free(data->result);
 	data->result = tmp;
 }
@@ -32,15 +33,17 @@ static void	ft_apply_width_left(t_data *data, char *padding)
 			tmp = ft_strjoin(" ", padding);
 		else if (data->result[0] == '+')
 			tmp = ft_strjoin("+", padding);
-		else if (data->result[0] == '-')
+		else
 			tmp = ft_strjoin("-", padding);
 		free(padding);
 		padding = ft_strjoin(tmp, data->result + 1);
+		free(tmp);
 		free(data->result);
 		data->result = padding;
 		return ;
 	}
 	tmp = ft_strjoin(padding, data->result);
+	free(padding);
 	free(data->result);
 	data->result = tmp;
 }
@@ -54,6 +57,12 @@ void	ft_apply_width(t_data *data)
 	if (len_padding <= 0)
 		return ;
 	padding = malloc(sizeof(char) * (len_padding + 1));
+	if (!padding)
+	{
+		free(data->result);
+		data->result = NULL;
+		return ;
+	}
 	if (data->minus)
 	{
 		ft_memset(padding, ' ', len_padding);
