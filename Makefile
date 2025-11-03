@@ -1,4 +1,4 @@
-NAME = ft_printf.a
+NAME = libftprintf.a
 CC = cc
 CFLAGS = -Werror -Wall -Wextra
 
@@ -15,70 +15,69 @@ SRCS = ft_printf.c \
 	
 OBJS = $(SRCS:.c=.o)
 
-SRCS_libft =	ft_isalpha.c \
-	ft_isdigit.c \
-	ft_isalnum.c \
-	ft_isascii.c \
-	ft_isprint.c \
-	ft_strlen.c \
-	ft_memset.c \
-	ft_bzero.c \
-	ft_memcpy.c \
-	ft_memmove.c \
-	ft_strlcpy.c \
-	ft_strlcat.c \
-	ft_toupper.c \
-	ft_tolower.c \
-	ft_strchr.c \
-	ft_strrchr.c \
-	ft_strncmp.c \
-	ft_memchr.c \
-	ft_memcmp.c \
-	ft_strnstr.c \
-	ft_atoi.c \
-	ft_calloc.c \
-	ft_strdup.c \
-	ft_substr.c \
-	ft_strjoin.c \
-	ft_strtrim.c \
-	ft_split.c \
-	ft_itoa.c \
-	ft_strmapi.c \
-	ft_striteri.c \
-	ft_putchar_fd.c \
-	ft_putstr_fd.c \
-	ft_putendl_fd.c \
-	ft_putnbr_fd.c \
-	ft_lstnew_bonus.c \
-	ft_lstadd_front_bonus.c \
-	ft_lstsize_bonus.c \
-	ft_lstlast_bonus.c \
-	ft_lstadd_back_bonus.c \
-	ft_lstdelone_bonus.c \
-	ft_lstclear_bonus.c \
-	ft_lstiter_bonus.c \
-	ft_lstmap_bonus.c
+libft_DIR = libft/
 
-OBJS_libft = $(SRCS:.c=.o)
+SRCS_libft =	$(libft_DIR)ft_isalpha.c \
+	$(libft_DIR)ft_isdigit.c \
+	$(libft_DIR)ft_isalnum.c \
+	$(libft_DIR)ft_isascii.c \
+	$(libft_DIR)ft_isprint.c \
+	$(libft_DIR)ft_strlen.c \
+	$(libft_DIR)ft_memset.c \
+	$(libft_DIR)ft_bzero.c \
+	$(libft_DIR)ft_memcpy.c \
+	$(libft_DIR)ft_memmove.c \
+	$(libft_DIR)ft_strlcpy.c \
+	$(libft_DIR)ft_strlcat.c \
+	$(libft_DIR)ft_toupper.c \
+	$(libft_DIR)ft_tolower.c \
+	$(libft_DIR)ft_strchr.c \
+	$(libft_DIR)ft_strrchr.c \
+	$(libft_DIR)ft_strncmp.c \
+	$(libft_DIR)ft_memchr.c \
+	$(libft_DIR)ft_memcmp.c \
+	$(libft_DIR)ft_strnstr.c \
+	$(libft_DIR)ft_atoi.c \
+	$(libft_DIR)ft_calloc.c \
+	$(libft_DIR)ft_strdup.c \
+	$(libft_DIR)ft_substr.c \
+	$(libft_DIR)ft_strjoin.c \
+	$(libft_DIR)ft_strtrim.c \
+	$(libft_DIR)ft_split.c \
+	$(libft_DIR)ft_itoa.c \
+	$(libft_DIR)ft_strmapi.c \
+	$(libft_DIR)ft_striteri.c \
+	$(libft_DIR)ft_putchar_fd.c \
+	$(libft_DIR)ft_putstr_fd.c \
+	$(libft_DIR)ft_putendl_fd.c \
+	$(libft_DIR)ft_putnbr_fd.c \
+	$(libft_DIR)ft_lstnew_bonus.c \
+	$(libft_DIR)ft_lstadd_front_bonus.c \
+	$(libft_DIR)ft_lstsize_bonus.c \
+	$(libft_DIR)ft_lstlast_bonus.c \
+	$(libft_DIR)ft_lstadd_back_bonus.c \
+	$(libft_DIR)ft_lstdelone_bonus.c \
+	$(libft_DIR)ft_lstclear_bonus.c \
+	$(libft_DIR)ft_lstiter_bonus.c \
+	$(libft_DIR)ft_lstmap_bonus.c
+
+OBJS_libft = $(SRCS_libft:.c=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
-	ar rcs $(NAME) $(OBJS)
+$(NAME): $(OBJS) $(OBJS_libft)
+	ar rcs $(NAME) $(OBJS) $(OBJ_libft)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rf $(OBJS) $(BONUS_OBJS)
+	rm -rf $(OBJS) $(OBJ_libft)
 
 fclean: clean
 	rm -rf $(NAME)
 
 re: fclean all
-
-bonus: $(OBJS) $(BONUS_OBJS)
-	ar rcs $(NAME) $(OBJS) $(BONUS_OBJS)
 
 .PHONY: all clean fclean re bonus
 
