@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:59:06 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/03 10:17:44 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/03 15:00:34 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*ft_char_str(char c)
 {
-	char *str;
+	char	*str;
 
 	str = malloc(sizeof(char) * 2);
 	if (!str)
@@ -26,7 +26,7 @@ char	*ft_char_str(char c)
 
 char	*ft_string(char *s)
 {
-	char *str;
+	char	*str;
 
 	if (!s)
 	{

@@ -6,32 +6,32 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 10:48:17 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/03 10:50:38 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/03 15:20:06 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-char *ft_apply_sign(t_data *data, char *result)
+void	ft_apply_sign(t_data *data)
 {
-	char *tmp;
+	char	*tmp;
 
-	if (result[0] == '-')
-		return (result);
-	
+	if (data->result[0] == '-')
+		return ;
 	if (data->plus)
 	{
-		tmp = ft_strjoin("+", result);
-		free(result);
-		return (tmp);
+		tmp = ft_strjoin("+", data->result);
+		if (!tmp)
+			data->result = NULL;
+		free(data->result);
+		data->result = tmp;
 	}
-
 	if (data->space)
 	{
-		tmp = ft_strjoin(" ", result);
-		free(result);
-		return (tmp);
+		tmp = ft_strjoin(" ", data->result);
+		if (!tmp)
+			data->result = NULL;
+		free(data->result);
+		data->result = tmp;
 	}
-
-	return (result);
 }

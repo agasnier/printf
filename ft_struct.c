@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:58:01 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/03 09:52:24 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/03 15:43:18 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	ft_init_struct(t_data *data)
 {
-
 	data->hash = 0;
 	data->minus = 0;
 	data->zero = 0;
@@ -24,12 +23,13 @@ void	ft_init_struct(t_data *data)
 	data->is_prec = 0;
 	data->prec = 0;
 	data->spec = '\0';
-	data->result = '\0';
+	data->result = NULL;
 }
 
 void	ft_pars_flags(char *str, int *i, t_data *data)
 {
-	while (str[*i] == '#' || str[*i] == '-' || str[*i] == '0' || str[*i] == '+' || str[*i] == ' ')
+	while (str[*i] == '#' || str[*i] == '-' || str[*i] == '0'
+		|| str[*i] == '+' || str[*i] == ' ')
 	{
 		if (str[*i] == '#')
 			data->hash = 1;
@@ -45,7 +45,6 @@ void	ft_pars_flags(char *str, int *i, t_data *data)
 	}
 }
 
-//gerer la valeur dynamique ???
 void	ft_pars_width(char *str, int *i, t_data *data)
 {
 	int	width;
@@ -60,17 +59,14 @@ void	ft_pars_width(char *str, int *i, t_data *data)
 	data->width = width;
 }
 
-//gerer la valeur dynamique ???
 void	ft_pars_preci(char *str, int *i, t_data *data)
 {
 	int	prec;
-	
+
 	if (str[*i] != '.')
 		return ;
-
 	data->is_prec = 1;
 	(*i)++;
-
 	prec = 0;
 	while (str[*i] >= '0' && str[*i] <= '9')
 	{
@@ -79,11 +75,12 @@ void	ft_pars_preci(char *str, int *i, t_data *data)
 		(*i)++;
 	}
 	data->prec = prec;
-	
 }
 
 void	ft_pars_speci(char *str, int *i, t_data *data)
 {
-	if (str[*i] == 'c' || str[*i] == 'u' || str[*i] == 's' || str[*i] == 'p' || str[*i] == 'd' || str[*i] == 'i' || str[*i] == 'x' || str[*i] == 'X' || str[*i] == '%')
+	if (str[*i] == 'c' || str[*i] == 'u' || str[*i] == 's'
+		|| str[*i] == 'p' || str[*i] == 'd' || str[*i] == 'i'
+		|| str[*i] == 'x' || str[*i] == 'X' || str[*i] == '%')
 		data->spec = str[*i];
 }

@@ -1,90 +1,81 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_apply_precision.c                                     :+:      :+:    :+:   */
+/*   ft_apply_precision.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 10:47:20 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/03 10:48:27 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/03 15:21:24 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static char *ft_apply_preci_str(t_data *data, char *result)
+void	ft_apply_preci_numb_pos(t_data *data, char *padding)
 {
-	char *tmp;
+	char	*tmp;
 
-	if (data->prec >= (int)ft_strlen(result))
-		return (result);
-	tmp = malloc(sizeof(char) * (data->prec + 1));
-	if (!tmp)
-		return (NULL);
-	ft_memcpy(tmp, result, data->prec);
-	tmp[data->prec] = '\0';
-	free(result);
-	return(tmp);
+	tmp = ft_strjoin(padding, data->result);
+	free(data->result);
+	data->result = tmp;
 }
 
-static char *ft_apply_preci_numb_pos(char *padding, char *result)
+void	ft_apply_preci_numb_neg(t_data *data, char *padding)
 {
-	char *tmp;
-
-	tmp = ft_strjoin(padding, result);
-	free(padding);
-	free(result);
-	return (tmp);
-}
-
-static char *ft_apply_preci_numb_neg(char *padding, char *result)
-{
-	char *tmp;
+	char	*tmp;
 
 	tmp = ft_strjoin("-", padding);
 	free(padding);
-	padding = ft_strjoin(tmp, result + 1);
-	free(result);
-	free(tmp);
-	return (padding);
+	padding = ft_strjoin(tmp, data->result + 1);
+	free(data->result);
+	data->result = padding;
 }
 
-static char *ft_apply_preci_numb(t_data *data, char *result)
+void	ft_apply_preci_numb(t_data *data)
 {
-	char	*tmp;
 	char	*padding;
 	int		len_padding;
 
-	if (data->prec == 0)
-	{
-		free(result);
-		tmp = ft_strdup("");
-		return (tmp);
-	}
-	if (result[0] == '-')
-		len_padding = data->prec - (int)ft_strlen(result) + 1;
+	if (data->prec == 0 && data->result[0] == '0' && data->result[1] == '\0')
+		data->result = ft_strdup("");
+	if (data->result[0] == '-')
+		len_padding = data->prec - (int)ft_strlen(data->result) + 1;
 	else
-		len_padding = data->prec - (int)ft_strlen(result);
+		len_padding = data->prec - (int)ft_strlen(data->result);
 	if (len_padding <= 0)
-		return (result);
-
+		return ;
 	padding = malloc(len_padding + 1);
 	if (!padding)
-		return (NULL);
+		data->result = NULL;
 	ft_memset(padding, '0', len_padding);
 	padding[len_padding] = '\0';
-	if (result[0] == '-')
-		tmp = ft_apply_preci_numb_neg(padding, result);
-	else 
-		tmp = ft_apply_preci_numb_pos(padding, result);
-	return (tmp);
+	if (data->result[0] == '-')
+		ft_apply_preci_numb_neg(data, padding);
+	else
+		ft_apply_preci_numb_pos(data, padding);
 }
 
-char *ft_apply_preci(t_data *data, char *result)
+void	ft_apply_preci_str(t_data *data)
 {
-		if (data->spec == 's')
-			result = ft_apply_preci_str(data, result);
-		else if (data->spec == 'd' || data->spec == 'i' || data->spec == 'u' || data->spec == 'x' || data->spec == 'X')
-			result = ft_apply_preci_numb(data, result);
-		return (result);
+	char	*tmp;
+
+	if (data->prec >= (int)ft_strlen(data->result))
+		return ;
+	tmp = malloc(sizeof(char) * (data->prec + 1));
+	if (!tmp)
+		data->result = NULL;
+	ft_memcpy(tmp, data->result, data->prec);
+	tmp[data->prec] = '\0';
+	free(data->result);
+	data->result = tmp;
+}
+
+void	ft_apply_preci(t_data *data)
+{
+	if (data->spec == 's')
+		ft_apply_preci_str(data);
+	else if (data->spec == 'd' || data->spec == 'i' || data->spec == 'u'
+		|| data->spec == 'x' || data->spec == 'X')
+		ft_apply_preci_numb(data);
 }

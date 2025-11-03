@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:58:18 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/03 10:34:21 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/03 15:01:38 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*ft_numb(int num)
 
 int	ft_num_len(unsigned long int num, int base_size)
 {
-	int len;
+	int	len;
 
 	len = 0;
 	if (num == 0)
@@ -39,8 +39,8 @@ int	ft_num_len(unsigned long int num, int base_size)
 
 char	*ft_unsigned(unsigned int num)
 {
-	int len;
-	char *c_num;
+	int		len;
+	char	*c_num;
 
 	len = ft_num_len((unsigned long int)num, 10);
 	c_num = malloc(sizeof(char) * (len + 1));
