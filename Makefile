@@ -15,19 +15,29 @@ SRCS = ft_printf.c \
 	
 OBJS = $(SRCS:.c=.o)
 
+LIBFT_DIR = libft/
+
+LIBFT = $(LIBFT_DIR)libft.a
+
 all: $(NAME)
 
-$(NAME): $(OBJS)
+$(NAME): $(LIBFT) $(OBJS)
+	cp $(LIBFT) $(NAME)
 	ar rcs $(NAME) $(OBJS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
+$(LIBFT):
+	make -C $(LIBFT_DIR)
+
 clean:
 	rm -rf $(OBJS)
+	make -C $(LIBFT_DIR) clean
 
 fclean: clean
 	rm -rf $(NAME)
+	make -C $(LIBFT_DIR) fclean
 
 re: fclean all
 
