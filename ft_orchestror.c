@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:59:02 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/03 20:53:41 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/04 09:52:25 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,10 @@ int	ft_operator(char *str, int *i, va_list args)
 	ft_apply_struct(&data);
 	if (!data.result)
 		return (-1);
-	len = ft_strlen(data.result);
+	if (data.spec == 'c')
+		len = 1;
+	else
+		len = ft_strlen(data.result);
 	write(1, data.result, len);
 	free(data.result);
 	return (len);

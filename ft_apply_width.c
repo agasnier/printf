@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 10:51:17 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/03 19:12:30 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/04 10:19:00 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,19 +63,14 @@ void	ft_apply_width(t_data *data)
 		data->result = NULL;
 		return ;
 	}
-	if (data->minus)
+	if (!data->zero)
 	{
 		ft_memset(padding, ' ', len_padding);
 		ft_apply_width_right(data, padding);
 	}
-	else if (data->zero)
-	{
-		ft_memset(padding, '0', len_padding);
-		ft_apply_width_left(data, padding);
-	}
 	else
 	{
-		ft_memset(padding, ' ', len_padding);
+		ft_memset(padding, '0', len_padding);
 		ft_apply_width_left(data, padding);
 	}
 }
