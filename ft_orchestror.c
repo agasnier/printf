@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:59:02 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/04 09:52:25 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/05 17:38:20 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,13 @@ void	ft_apply_struct(t_data *data)
 		data->zero = 0;
 	if (data->plus)
 		data->space = 0;
+	if (data->is_prec && (data->spec == 'd' || data->spec == 'i'
+			|| data->spec == 'u' || data->spec == 'x' || data->spec == 'X'))
+		data->zero = 0;
 	if (data->result && data->is_prec)
 		ft_apply_preci(data);
-	if (data->result && (data->plus || data->space))
+	if (data->result && (data->plus || data->space)
+		&& (data->spec == 'd' || data->spec == 'i'))
 		ft_apply_sign(data);
 	if (data->result && data->hash)
 		ft_apply_hash(data);
@@ -66,11 +70,12 @@ int	ft_operator(char *str, int *i, va_list args)
 	ft_apply_struct(&data);
 	if (!data.result)
 		return (-1);
-	if (data.spec == 'c')
+	if (data.spec == 'c' && !data.width)
 		len = 1;
 	else
 		len = ft_strlen(data.result);
-	write(1, data.result, len);
+	if (write(1, data.result, len) == -1)
+		return (-1);
 	free(data.result);
 	return (len);
 }

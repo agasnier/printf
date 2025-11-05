@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 12:15:42 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/04 09:48:45 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/05 17:39:20 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,11 @@ static int	ft_printf_helper(char *str, va_list args)
 			len_print += len_func;
 		}
 		else
-			len_print += write(1, &str[i], 1);
+		{
+			if(write(1, &str[i], 1) == -1)
+			 	return (-1);
+			len_print++;
+		}
 		i++;
 	}
 	return (len_print);

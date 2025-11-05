@@ -63,14 +63,19 @@ void	ft_apply_width(t_data *data)
 		data->result = NULL;
 		return ;
 	}
-	if (!data->zero)
+	if (data->minus)
 	{
 		ft_memset(padding, ' ', len_padding);
 		ft_apply_width_right(data, padding);
 	}
-	else
+	else if (data->zero)
 	{
 		ft_memset(padding, '0', len_padding);
+		ft_apply_width_left(data, padding);
+	}
+	else
+	{
+		ft_memset(padding, ' ', len_padding);
 		ft_apply_width_left(data, padding);
 	}
 }
