@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 15:29:10 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/06 16:04:27 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/06 16:29:18 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int main(void)
 ////////////////////////////////////////////////////////////////////////////////////
 	printf("Prints a string \n");
 	ft = ft_printf("%s\t", "Alexandre");
-	nor = printf("%s\tn", "Alexandre");
+	nor = printf("%s\t", "Alexandre");
 	printf("%d\n\n", ft - nor);
 
 	ft = ft_printf("%10s\t", "Alexandre");

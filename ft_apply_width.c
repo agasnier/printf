@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 10:51:17 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/06 16:07:15 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/06 16:26:21 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,16 @@ static void	ft_apply_width_left(t_data *data, char *padding)
 	data->result = tmp;
 }
 
-void	ft_apply_width(t_data *data)
+void	ft_apply_width(t_data *data) //enlever 3 lignes
 {
 	int		len_padding;
 	char	*padding;
 
 	len_padding = data->width - (int)ft_strlen(data->result);
+	if (len_padding <= 0)
+		return ;
 	padding = malloc(sizeof(char) * (len_padding + 1));
-	if (len_padding <= 0 && !padding)
+	if (!padding)
 	{
 		free(data->result);
 		data->result = NULL;
@@ -64,6 +66,7 @@ void	ft_apply_width(t_data *data)
 	if (data->minus)
 	{
 		ft_memset(padding, ' ', len_padding);
+		padding[len_padding] = '\0';
 		ft_apply_width_right(data, padding);
 	}
 	else
@@ -71,7 +74,8 @@ void	ft_apply_width(t_data *data)
 		if (data->zero)
 			ft_memset(padding, '0', len_padding);
 		else
-			ft_memset(padding, ' ', len_padding);
+		ft_memset(padding, ' ', len_padding);
+		padding[len_padding] = '\0';
 		ft_apply_width_left(data, padding);
 	}
 }
