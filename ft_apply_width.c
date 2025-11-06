@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 10:51:17 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/06 16:26:21 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/06 16:59:57 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	ft_apply_width(t_data *data) //enlever 3 lignes
 		if (data->zero)
 			ft_memset(padding, '0', len_padding);
 		else
-		ft_memset(padding, ' ', len_padding);
+			ft_memset(padding, ' ', len_padding);
 		padding[len_padding] = '\0';
 		ft_apply_width_left(data, padding);
 	}

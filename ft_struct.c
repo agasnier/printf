@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:58:01 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/06 16:14:36 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/06 16:55:45 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	ft_pars_preci(char *str, int *i, t_data *data)
 	if (str[*i] != '.')
 		return ;
 	data->is_prec = 1;
-	i++;
+	(*i)++;
 	prec = 0;
 	while (str[*i] >= '0' && str[*i] <= '9')
 	{
