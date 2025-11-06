@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 12:15:42 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/06 15:25:05 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/06 16:11:21 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ static int	ft_printf_helper(char *str, va_list args)
 	{
 		if (str[i] == '%')
 		{
-			len_func = ft_operator(str, ++i, args);
+			i++;
+			len_func = ft_operator(str, &i, args);
 			if (len_func == -1)
 				return (-1);
 			len_print += len_func;

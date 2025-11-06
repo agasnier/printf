@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 11:36:10 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/06 15:28:53 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/06 16:12:37 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef struct s_data
 }	t_data;
 
 int		ft_printf(const char *str, ...);
-int		ft_operator(char *str, int i, va_list args);
+int		ft_operator(char *str, int *i, va_list args);
 void	ft_create_str(t_data *data, va_list args);
 void	ft_apply_struct(t_data *data);
 char	*ft_char_str(char c);
@@ -42,10 +42,10 @@ char	*ft_numb(int num);
 int		ft_num_len(unsigned long int num, int base_size);
 char	*ft_unsigned(unsigned int num);
 void	ft_init_struct(t_data *data);
-void	ft_pars_flags(char *str, int i, t_data *data);
-void	ft_pars_width(char *str, int i, t_data *data);
-void	ft_pars_preci(char *str, int i, t_data *data);
-void	ft_pars_speci(char *str, int i, t_data *data);
+void	ft_pars_flags(char *str, int *i, t_data *data);
+void	ft_pars_width(char *str, int *i, t_data *data);
+void	ft_pars_preci(char *str, int *i, t_data *data);
+void	ft_pars_speci(char *str, int *i, t_data *data);
 void	ft_apply_preci(t_data *data);
 void	ft_apply_sign(t_data *data);
 void	ft_apply_hash(t_data *data);

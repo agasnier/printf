@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:59:02 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/06 14:56:44 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/06 16:15:27 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	ft_create_str(t_data *data, va_list args)
 		data->result = ft_unsigned(va_arg(args, unsigned int));
 }
 
-int	ft_operator(char *str, int i, va_list args)
+int	ft_operator(char *str, int *i, va_list args)
 {
 	int		len;
 	t_data	data;

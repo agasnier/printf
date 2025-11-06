@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:58:01 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/06 14:58:52 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/06 16:14:36 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,61 +26,61 @@ void	ft_init_struct(t_data *data)
 	data->result = NULL;
 }
 
-void	ft_pars_flags(char *str, int i, t_data *data)
+void	ft_pars_flags(char *str, int *i, t_data *data)
 {
-	while (str[i] == '#' || str[i] == '-' || str[i] == '0'
-		|| str[i] == '+' || str[i] == ' ')
+	while (str[*i] == '#' || str[*i] == '-' || str[*i] == '0'
+		|| str[*i] == '+' || str[*i] == ' ')
 	{
-		if (str[i] == '#')
+		if (str[*i] == '#')
 			data->hash = 1;
-		else if (str[i] == '-')
+		else if (str[*i] == '-')
 			data->minus = 1;
-		else if (str[i] == '0')
+		else if (str[*i] == '0')
 			data->zero = 1;
-		else if (str[i] == '+')
+		else if (str[*i] == '+')
 			data->plus = 1;
-		else if (str[i] == ' ')
+		else if (str[*i] == ' ')
 			data->space = 1;
-		i++;
+		(*i)++;
 	}
 }
 
-void	ft_pars_width(char *str, int i, t_data *data)
+void	ft_pars_width(char *str, int *i, t_data *data)
 {
 	int	width;
 
 	width = 0;
-	while (str[i] >= '0' && str[i] <= '9')
+	while (str[*i] >= '0' && str[*i] <= '9')
 	{
 		width *= 10;
-		width += str[i] - '0';
-		i++;
+		width += str[*i] - '0';
+		(*i)++;
 	}
 	data->width = width;
 }
 
-void	ft_pars_preci(char *str, int i, t_data *data)
+void	ft_pars_preci(char *str, int *i, t_data *data)
 {
 	int	prec;
 
-	if (str[i] != '.')
+	if (str[*i] != '.')
 		return ;
 	data->is_prec = 1;
 	i++;
 	prec = 0;
-	while (str[i] >= '0' && str[i] <= '9')
+	while (str[*i] >= '0' && str[*i] <= '9')
 	{
 		prec *= 10;
-		prec += str[i] - '0';
-		i++;
+		prec += str[*i] - '0';
+		(*i)++;
 	}
 	data->prec = prec;
 }
 
-void	ft_pars_speci(char *str, int i, t_data *data)
+void	ft_pars_speci(char *str, int *i, t_data *data)
 {
-	if (str[i] == 'c' || str[i] == 'u' || str[i] == 's'
-		|| str[i] == 'p' || str[i] == 'd' || str[i] == 'i'
-		|| str[i] == 'x' || str[i] == 'X' || str[i] == '%')
-		data->spec = str[i];
+	if (str[*i] == 'c' || str[*i] == 'u' || str[*i] == 's'
+		|| str[*i] == 'p' || str[*i] == 'd' || str[*i] == 'i'
+		|| str[*i] == 'x' || str[*i] == 'X' || str[*i] == '%')
+		data->spec = str[*i];
 }
