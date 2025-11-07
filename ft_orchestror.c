@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:59:02 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/06 16:15:27 by algasnie         ###   ########.fr       */
+/*   Updated: 2025/11/07 10:16:18 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int	ft_operator(char *str, int *i, va_list args)
 	t_data	data;
 
 	len = 0;
+	(*i)++;
 	ft_init_struct(&data);
 	ft_pars_flags(str, i, &data);
 	ft_pars_width(str, i, &data);
