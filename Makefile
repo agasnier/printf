@@ -19,7 +19,10 @@ LIBFT_DIR = libft/
 
 LIBFT = $(LIBFT_DIR)libft.a
 
+
 all: $(NAME)
+
+bonus: all
 
 $(NAME): $(LIBFT) $(OBJS)
 	cp $(LIBFT) $(NAME)
