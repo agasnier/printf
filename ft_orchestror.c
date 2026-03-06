@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:59:02 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/07 10:16:18 by algasnie         ###   ########.fr       */
+/*   Updated: 2026/03/06 11:06:40 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	ft_create_str(t_data *data, va_list args)
 		data->result = ft_unsigned(va_arg(args, unsigned int));
 }
 
-int	ft_operator(char *str, int *i, va_list args)
+int	ft_operator(int fd, char *str, int *i, va_list args)
 {
 	int		len;
 	t_data	data;
@@ -75,7 +75,7 @@ int	ft_operator(char *str, int *i, va_list args)
 		len = 1;
 	else
 		len = ft_strlen(data.result);
-	if (write(1, data.result, len) == -1)
+	if (write(fd, data.result, len) == -1)
 		return (-1);
 	free(data.result);
 	return (len);

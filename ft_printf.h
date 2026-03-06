@@ -6,7 +6,7 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 11:36:10 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/06 16:12:37 by algasnie         ###   ########.fr       */
+/*   Updated: 2026/03/06 11:04:49 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ typedef struct s_data
 	char	*result;
 }	t_data;
 
-int		ft_printf(const char *str, ...);
-int		ft_operator(char *str, int *i, va_list args);
+int		ft_printf(int fd, const char *str, ...);
+int		ft_operator(int fd, char *str, int *i, va_list args);
 void	ft_create_str(t_data *data, va_list args);
 void	ft_apply_struct(t_data *data);
 char	*ft_char_str(char c);

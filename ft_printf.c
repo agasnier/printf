@@ -6,13 +6,13 @@
 /*   By: algasnie <algasnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 12:15:42 by algasnie          #+#    #+#             */
-/*   Updated: 2025/11/07 10:15:13 by algasnie         ###   ########.fr       */
+/*   Updated: 2026/03/06 11:06:03 by algasnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static int	ft_printf_helper(char *str, va_list args)
+static int	ft_printf_helper(int fd, char *str, va_list args)
 {
 	int		i;
 	int		len_print;
@@ -25,14 +25,14 @@ static int	ft_printf_helper(char *str, va_list args)
 	{
 		if (str[i] == '%')
 		{
-			len_func = ft_operator(str, &i, args);
+			len_func = ft_operator(fd, str, &i, args);
 			if (len_func == -1)
 				return (-1);
 			len_print += len_func;
 		}
 		else
 		{
-			if (write(1, &str[i], 1) == -1)
+			if (write(fd, &str[i], 1) == -1)
 				return (-1);
 			len_print++;
 		}
@@ -41,7 +41,7 @@ static int	ft_printf_helper(char *str, va_list args)
 	return (len_print);
 }
 
-int	ft_printf(const char *str, ...)
+int	ft_printf(int fd, const char *str, ...)
 {
 	va_list	args;
 	int		len_print;
@@ -49,7 +49,7 @@ int	ft_printf(const char *str, ...)
 	va_start(args, str);
 	if (!str)
 		return (-1);
-	len_print = ft_printf_helper((char *)str, args);
+	len_print = ft_printf_helper(fd, (char *)str, args);
 	va_end(args);
 	return (len_print);
 }
